@@ -112,7 +112,7 @@ const List = () => {
     if (o.search != '') {
       var data = { data: [] };
       if (networkStatus.connected) {
-        const result = await http.get('http://localhost:8080/paciente/search/' + o.search);
+        const result = await http.get('/paciente/search/' + o.search);
         data.size = result.size;
         data.data = data.data.concat(result.content);
       }
@@ -126,7 +126,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/paciente/pagination');
+      const result = await http.get('/paciente/pagination');
       data.size = result.size;
       data.data = data.data.concat(result.content);
     }

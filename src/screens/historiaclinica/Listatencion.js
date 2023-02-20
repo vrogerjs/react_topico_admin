@@ -126,9 +126,9 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/atencion/pagination/' + pid);
+      const result = await http.get('/atencion/pagination/' + pid);
 
-      const resultHC = await http.get('http://localhost:8080/historiaclinica/' + pid);
+      const resultHC = await http.get('/historiaclinica/' + pid);
 
       var hoy = new Date()
       var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)

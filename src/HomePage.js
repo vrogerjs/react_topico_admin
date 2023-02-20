@@ -230,6 +230,7 @@ const HomePage = ({ logOut, match }) => {
     .then(module => ({ default: module.Form }))
   );
 
+
   // Reporte Ficha Medica
   const HistoriaclinicaFormview = lazyLoader(() => import('./screens/historiaclinica/Formview').then(module => ({ default: module.Form }))
   );
@@ -246,6 +247,12 @@ const HomePage = ({ logOut, match }) => {
 
   // Reporte Ficha Psicologica
   const PsicologicaFormview = lazyLoader(() => import('./screens/psicologica/Formview').then(module => ({ default: module.Form }))
+  );
+
+  //Upload File
+  const HistoriaclinicaListfile = lazyLoader(() => import('./screens/historiaclinica/Listfile'));
+  const HistoriaclinicaFormfile = lazyLoader(() => import('./screens/historiaclinica/Formfile')
+    .then(module => ({ default: module.Form }))
   );
 
   const UserList = lazyLoader(() => import('./screens/user/List'));
@@ -337,6 +344,12 @@ const HomePage = ({ logOut, match }) => {
           <Route path={`/historiaclinica/atencion/create/:pid/:temp`} element={<HistoriaclinicaFormatencion />} />
           <Route path={`/historiaclinica/atencion/:pid/edit/:temp`} element={<HistoriaclinicaFormatencion />} />
 
+          <Route path={`/historiaclinica/:pid/file`} element={<HistoriaclinicaListfile />} />
+          <Route path={`/historiaclinica/file/create/:pid/:temp`} element={<HistoriaclinicaFormfile />} />
+          <Route path={`/historiaclinica/file/:fid/edit/:temp`} element={<HistoriaclinicaFormfile />} />
+
+
+
           {/* Reporte de Atención Medica */}
           <Route path={`/historiaclinica/atencion/:pid`} element={<HistoriaclinicaFormview />} />
 
@@ -351,7 +364,6 @@ const HomePage = ({ logOut, match }) => {
 
           {/* Reporte de Atención Psicologica */}
           <Route path={`/psicologica/atencion/:pid`} element={<PsicologicaFormview />} />
-
 
           <Route path={`/user`} element={<UserList setO={setO} />} />
           <Route path={`/user/create`} element={<UserForm />} />

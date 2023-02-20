@@ -55,7 +55,7 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get('http://localhost:8080/psicologica/' + pid).then((result) => {
+        http.get('/psicologica/' + pid).then((result) => {
 
           result.historiaclinica_id = result.historiaclinica.id;
           result.numero = result.historiaclinica.numero;

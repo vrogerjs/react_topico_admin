@@ -73,7 +73,7 @@ export const Form = () => {
     if (temp == 1) {
       if (pid) {
         if (networkStatus.connected) {
-          http.get('http://localhost:8080/historiaclinica/' + pid).then((result) => {
+          http.get('/historiaclinica/' + pid).then((result) => {
 
             result.historiaclinica_id = result.id;
             result.numero = result.numero;
@@ -126,7 +126,7 @@ export const Form = () => {
     } else {
       if (pid) {
         if (networkStatus.connected) {
-          http.get('http://localhost:8080/atencion/' + pid).then((result) => {
+          http.get('/atencion/' + pid).then((result) => {
 
             result.historiaclinica_id = result.historiaclinica.id;
             result.numero = result.historiaclinica.numero;
@@ -200,7 +200,7 @@ export const Form = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await (http.get('http://localhost:8080/oficina'));
+      const result = await (http.get('/oficina'));
       setOficinas(result);
     }
   };
@@ -236,7 +236,7 @@ export const Form = () => {
         // o.edad = edad;
 
 
-        http.post('http://localhost:8080/atencion', o).then(async (result) => {
+        http.post('/atencion', o).then(async (result) => {
           console.log(result);
           if (!o._id) {
             if (result.id) {

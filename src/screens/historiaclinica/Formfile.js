@@ -13,6 +13,7 @@ import {
   ReplyAll,
   WifiProtectedSetup
 } from '@mui/icons-material';
+import FileUpload from "react-material-file-upload";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Accordion, AccordionSummary, AccordionDetails, Alert,
@@ -46,6 +47,8 @@ export const Form = () => {
 
   const { pid } = useParams();
 
+  const { fid } = useParams();
+
   const { temp } = useParams();
 
   const formRef = createRef();
@@ -55,6 +58,8 @@ export const Form = () => {
   const [oficinas, setOficinas] = useState([]);
 
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
+
+  const [file, setFile] = useState(null);
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
 
@@ -102,31 +107,11 @@ export const Form = () => {
             set(result);
           });
         }
-      } else {
-        try {
-          var s = localStorage.getItem("setting");
-          if (s) {
-            s = JSON.parse(s);
-            var o = {};
-            o.apeNomb = s.apeNomb;
-            o.tipoDocumento = s.tipoDocumento;
-            o.nroDocumento = s.nroDocumento;
-            o.fechaNacimiento = s.fechaNacimiento;
-            o.genero = s.genero;
-            o.celular = s.celular;
-            o.oficina = s.oficina;
-            o.modalidad = s.modalidad;
-            o.numero = s.numero;
-
-          }
-        } catch (e) {
-          console.log(e);
-        }
       }
     } else {
-      if (pid) {
+      if (fid) {
         if (networkStatus.connected) {
-          http.get('/psicologica/' + pid).then((result) => {
+          http.get('/file/' + fid).then((result) => {
 
             result.historiaclinica_id = result.historiaclinica.id;
             result.numero = result.historiaclinica.numero;
@@ -155,26 +140,6 @@ export const Form = () => {
             set(result);
           });
         }
-      } else {
-        try {
-          var s = localStorage.getItem("setting");
-          if (s) {
-            s = JSON.parse(s);
-            var o = {};
-            o.apeNomb = s.apeNomb;
-            o.tipoDocumento = s.tipoDocumento;
-            o.nroDocumento = s.nroDocumento;
-            o.fechaNacimiento = s.fechaNacimiento;
-            o.genero = s.genero;
-            o.celular = s.celular;
-            o.oficina = s.oficina;
-            o.modalidad = s.modalidad;
-            o.numero = s.numero;
-
-          }
-        } catch (e) {
-          console.log(e);
-        }
       }
     }
   }, [pid]);
@@ -190,7 +155,6 @@ export const Form = () => {
       toolBar.style.width = (width - nav.offsetWidth) + 'px';
     }
   }, [width, height]);
-
 
   useEffect(() => {
     dispatch({ type: 'title', title: 'Registrar Atención a Paciente - GORE Áncash' });
@@ -213,6 +177,16 @@ export const Form = () => {
     // navigate('/paciente/create', { replace: true });
   }
 
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleUpload = (event) => {
+    console.log('Uploading file:', event);
+    setFile(event);
+    // Aquí puedes agregar tu lógica para cargar el archivo en tu backend
+  };
+
   const onClickSave = async () => {
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
@@ -220,34 +194,56 @@ export const Form = () => {
       if (networkStatus.connected) {
         o.historiaclinica = { id: o.historiaclinica_id };
 
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file[0]);
+          formData.append('filename', file[0].name);
 
-        var hoy = new Date();
-        o.fechaEvaluacion = hoy;
-        // var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)
-        // var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
-        // var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
-        // if (
-        //   diferenciaMeses < 0 ||
-        //   (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-        // ) {
-        //   edad--
-        // }
-
-        // o.edad = edad;
-
-
-        http.post('/psicologica', o).then(async (result) => {
-          console.log(result);
-          if (!o._id) {
-            if (result.id) {
-              dispatch({ type: "snack", msg: 'Registro grabado!' });
-              navigate('/psicologica/' + o.historiaclinica_id + '/atencion', { replace: true });
+          http.post('https://web.regionancash.gob.pe/api/file/upload', formData, (h) => { delete h.Authorization; return h; }).then(async (result) => {
+            o.urlDocumento = result.tempFile;
+            if (temp == 1) {
+              o.id = '';
+              http.post('/file', o).then(async (result) => {
+                if (!o._id) {
+                  if (result.id) {
+                    dispatch({ type: "snack", msg: 'Registro grabado!' });
+                    navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
+                  }
+                  else {
+                    navigate(-1);
+                  }
+                }
+              });
+            } else {
+              http.post('/file', o).then(async (result) => {
+                if (!o._id) {
+                  if (result.id) {
+                    dispatch({ type: "snack", msg: 'Registro grabado!' });
+                    navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
+                  }
+                  else {
+                    navigate(-1);
+                  }
+                }
+              });
             }
-            else {
-              navigate(-1);
+          });
+        } else {
+          http.post('/file', o).then(async (result) => {
+            if (!o._id) {
+              if (result.id) {
+                dispatch({ type: "snack", msg: 'Registro grabado!' });
+                navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
+              }
+              else {
+                navigate(-1);
+              }
             }
-          }
-        });
+          });
+        }
+
+
+
       } else {
         if (!o.id) {
           o.tmpId = 1 * new Date();
@@ -264,9 +260,9 @@ export const Form = () => {
     }
   };
 
-  function onChangeProximaCita(v) {
-    set(o => ({ ...o, proximaCita: v }), () => {
-      o.proximaCita = v;
+  function onChangeFechaNacimiento(v) {
+    set(o => ({ ...o, fechaNacimiento: v }), () => {
+      o.fechaNacimiento = v;
     });
 
   }
@@ -354,190 +350,45 @@ export const Form = () => {
             </Table>
           </TableContainer>
 
-          <Accordion className='border-white'>
+          <Accordion className='border-white' defaultExpanded='true'>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
+              aria-controls="panel1a-content"
+              id="panel1a-header"
               className='bg-gore'
             >
-              <Typography>Motivo de la Consulta</Typography>
+              <Typography>Upload File</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Grid container>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={10}>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    multiline
                     size="medium"
-                    rows={4}
                     id="standard-name"
-                    label="Ingrese el Motivo de la Consulta: "
-                    placeholder="Motivo de la Consulta."
-                    {...defaultProps("motivo")}
+                    label="Ingrese el nombre del documento: "
+                    placeholder="Nombre del Documento"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("name")}
                   />
                 </Grid>
               </Grid>
-            </AccordionDetails>
-          </Accordion>
 
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Problema Actual</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Problema Actual: "
-                    placeholder="Problema Actual"
-                    {...defaultProps("problemaActual")}
-                  />
+              <Grid container spacing={2} alignItems="center" className='mt-1'>
+                <Grid item xs={12} md={1}>
                 </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Anamnesis (Datos Relevantes)</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese la Anamnesis (Datos Relevantes): "
-                    placeholder="Anamnesis"
-                    {...defaultProps("anamnesis")}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Diagnóstico Presuntivo</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Diagnóstico Presuntivo: "
-                    placeholder="Diagnóstico Presuntivo"
-                    {...defaultProps("diagnostico")}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Recomendaciones</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese las Recomendaciones: "
-                    placeholder="Recomendaciones"
-                    {...defaultProps("recomendacion")}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Próxima Cita</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <DesktopDatePicker
-                    label="Ingrese su Próxima Cita."
-                    inputFormat="DD/MM/YYYY"
-                    value={o.proximaCita || ''}
-                    onChange={onChangeProximaCita}
-                    renderInput={(params) =>
-                      <TextField
-                        type={'number'}
-                        sx={{ fontWeight: 'bold' }}
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="standard-name"
-                        label="Próxima Cita: "
-                        placeholder="Ingrese su Próxima Cita."
-                        // onKeyUp={onKeyUp}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Keyboard />
-                            </InputAdornment>
-                          ),
-                        }}
-                        {...params}
-                      // {...defaultProps("fechaNacimiento")}
-                      />}
-                  />
+                <Grid item xs={12} md={10}>
+                  <FileUpload value={file} onChange={setFile} />
                 </Grid>
               </Grid>
             </AccordionDetails>

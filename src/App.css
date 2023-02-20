@@ -228,6 +228,21 @@ textarea {
   margin-top: 1em !important;
 }
 
+.upload-label {
+  background-color: '#2196f3';
+  border-radius: 5;
+  color: '#fff';
+  padding: '10px 15px';
+}
+
+.upload-label:hover {
+  background-color: '#1976d2';
+}
+
+.display-none {
+  display: none;
+}
+
 .table-title-main {
   font-size: 20px !important;
   padding: 10px !important;

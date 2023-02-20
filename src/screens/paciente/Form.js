@@ -62,7 +62,7 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get('http://localhost:8080/paciente/' + pid).then((result) => {
+        http.get('/paciente/' + pid).then((result) => {
           result.oficina = result.oficina.id;
           var target = new Date(result.fechaNacimiento);
           result.fechaNacimiento = target;
@@ -112,7 +112,7 @@ export const Form = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await (http.get('http://localhost:8080/oficina'));
+      const result = await (http.get('/oficina'));
       setOficinas(result);
     }
   };
@@ -137,12 +137,12 @@ export const Form = () => {
 
       if (networkStatus.connected) {
         o2.oficina = { id: o.oficina };
-        http.post('http://localhost:8080/paciente', o2).then(async (result) => {
+        http.post('/paciente', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
 
               if (!pid) {
-                http.get('http://localhost:8080/historiaclinica/one').then(async (result2) => {
+                http.get('/historiaclinica/one').then(async (result2) => {
                   if (result2.length == 0) {
                     var v = 100000;
                     o.numerohc = v;
@@ -153,7 +153,7 @@ export const Form = () => {
                     o.numerohc = v;
                     set(o => ({ ...o, numerohc: v }));
                   }
-                  http.post('http://localhost:8080/historiaclinica', { numero: o.numerohc, paciente: { id: result.id } }).then(async (result) => {
+                  http.post('/historiaclinica', { numero: o.numerohc, paciente: { id: result.id } }).then(async (result) => {
                     dispatch({ type: "snack", msg: 'Registro grabado!' });
                     navigate('/historiaclinica', { replace: true });
                   });

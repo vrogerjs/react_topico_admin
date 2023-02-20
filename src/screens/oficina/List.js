@@ -102,7 +102,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/oficina/pagination');
+      const result = await http.get('/oficina/pagination');
       data.size = result.size;
       data.data = data.data.concat(result.content);
     }

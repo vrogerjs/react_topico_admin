@@ -7,7 +7,7 @@ import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
   TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, InputAdornment
 } from '@mui/material';
-import { AddTask, Autorenew, ManageSearch } from '@mui/icons-material';
+import { AddTask, Autorenew, CloudUpload, ManageSearch } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
@@ -106,7 +106,7 @@ const List = () => {
     if (o.search != '') {
       var data = { data: [] };
       if (networkStatus.connected) {
-        const result = await http.get('http://localhost:8080/historiaclinica/search/' + o.search);
+        const result = await http.get('/historiaclinica/search/' + o.search);
         data.size = result.size;
         data.data = data.data.concat(result.content);
       }
@@ -125,7 +125,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/historiaclinica/pagination');
+      const result = await http.get('/historiaclinica/pagination');
       console.log("resulttttaa", result);
       data.size = result.size;
       data.data = data.data.concat(result.content);
@@ -168,6 +168,10 @@ const List = () => {
     navigate('/historiaclinica/' + selected[0] + '/atencion');
   }
 
+ const uploadOnClick = () => {
+    navigate('/historiaclinica/' + selected[0] + '/file');
+  }
+
   const deleteOnClick = () => {
     dispatch({
       type: "confirm", msg: 'Esta seguro de eliminar el registro seleccionado?', cb: (e) => {
@@ -191,11 +195,13 @@ const List = () => {
     <>
       <Toolbar className="Toolbar-table mt-1" direction="row" >
         <Grid container spacing={2}>
-          <Grid item md={2}>
-
+          <Grid item xs={12} md={1}>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="info">Atender</Button>
+          </Grid>
+          <Grid item md={2}>
+            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="info">Archivos</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
@@ -204,10 +210,10 @@ const List = () => {
             <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
           </Grid> */}
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
+            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="info">Actualizar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="primary">Buscar</Button>
+            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="info">Buscar</Button>
           </Grid>
         </Grid>
       </Toolbar>

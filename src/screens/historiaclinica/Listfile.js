@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { db } from '../../db';
 import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
-  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
+  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, Link
 } from '@mui/material';
-import { Autorenew, ReplyAll, Visibility } from '@mui/icons-material';
+import { Autorenew, PictureAsPdf, ReplyAll, Visibility } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
 import {
   useNavigate, useParams
 } from "react-router-dom";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { set } from 'ol/transform';
-import Paper from '@mui/material/Paper';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 const bull = (
   <Box
@@ -126,7 +120,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('/psicologica/pagination/' + pid);
+      const result = await http.get('/file/pagination/' + pid);
 
       const resultHC = await http.get('/historiaclinica/' + pid);
 
@@ -194,20 +188,16 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Gestión de Historias Clínicas - GORE Áncash' });
+    dispatch({ type: 'title', title: 'Gestión de Archivos del Paciente - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
   const createOnClick = () => {
-    navigate('/psicologica/atencion/create/' + o.historiaclinica_id + '/1');
+    navigate('/historiaclinica/file/create/' + o.historiaclinica_id + '/1');
   };
 
   const editOnClick = () => {
-    navigate('/psicologica/atencion/' + selected[0] + '/edit/2');
-  }
-
-  const showOnClick = () => {
-    navigate('/psicologica/atencion/' + selected[0]);
+    navigate('/historiaclinica/file/' + selected[0] + '/edit/2');
   }
 
   const onClickBack = () => {
@@ -270,13 +260,10 @@ const List = () => {
       <Toolbar className="Toolbar-table mt-1" direction="row" >
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning" className='text-capitalize'>Editar</Button>
-          </Grid>
-          <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="info" className='text-capitalize'>Ver Ficha</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success" className='text-capitalize'>Actualizar</Button>
@@ -312,20 +299,11 @@ const List = () => {
                   }}
                 />
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
+              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Nombre del Documento
                 {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Consulta
+              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Documento
                 {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Problema Actual
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
-                {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
               </StyledTableCell>
             </TableRow>
           </TableHead>
@@ -350,20 +328,13 @@ const List = () => {
                         checked={isItemSelected}
                       />
                     </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
-                      {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
-                    </TableCell>
                     <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.motivo }} />
+                      {row.name}
                     </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.problemaActual }} />
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.diagnostico }} />
+                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' align='center'>
+                      <Link href={`https://web.regionancash.gob.pe/fs/temp/${row.urlDocumento}`} underline="none" target={'_link'}>
+                        <PictureAsPdf color="primary" />
+                      </Link>
                     </TableCell>
                   </StyledTableRow >
                 );

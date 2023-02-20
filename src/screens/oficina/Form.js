@@ -55,7 +55,7 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get('http://localhost:8080/oficina/' + pid).then((result) => {
+        http.get('/oficina/' + pid).then((result) => {
           set(result);
           console.log(result);
         });
@@ -105,7 +105,7 @@ export const Form = () => {
       var o2 = JSON.parse(JSON.stringify(o));
       if (networkStatus.connected) {
 
-        http.post('http://localhost:8080/oficina', o2).then(async (result) => {
+        http.post('/oficina', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
               // navigate('/oficina/' + result.id + '/edit', { replace: true });
