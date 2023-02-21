@@ -271,7 +271,7 @@ const HomePage = ({ logOut, match }) => {
 
 
   return (
-    <Box 
+    <Box
       sx={{ display: 'flex' }}>
       <CssBaseline />
       <VAppBar

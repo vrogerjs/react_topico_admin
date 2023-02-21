@@ -257,6 +257,17 @@ textarea {
   border-radius: 4px;
 }
 
+.MuiPaper-elevation {
+  background-color: #0f62ac !important;
+  border: 8px solid #0f62ac !important;
+}
+
+.MuiPaper-elevation4 {
+  background-color: #0f62ac !important;
+  border: 2px solid #FFF !important;
+  text-align: center !important;
+}
+
 /* .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
   background-color: #0f62ac !important;
   border: 8px solid #0f62ac !important;
