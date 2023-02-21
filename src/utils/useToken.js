@@ -48,7 +48,7 @@ export const Login = function ({ setToken }) {
   }
 
   const loginOnClick = function (e) {
-    http.post('/api/auth', { "username": o.name, "password": o.pass }, {})
+    http.post('https://web.regionancash.gob.pe/api/auth', { "username": o.name, "password": o.pass }, {})
       .then((data) => {
         console.log(data);
         if (data)
@@ -101,7 +101,7 @@ export const Login = function ({ setToken }) {
     console.log('useEffect',location);
     if (code){
 
-      http.post('/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data) => {
+      http.post('https://web.regionancash.gob.pe/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data) => {
        if (data.error) {
           setMsg(JSON.stringify(data.error));
         } else if (data.access_token||data.token) {
