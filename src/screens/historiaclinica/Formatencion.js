@@ -307,43 +307,43 @@ export const Form = () => {
                   <TableCell colSpan={10} className='border-table-black bg-table table-title-main'>DATOS PERSONALES DEL PACIENTE</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Número de Historia Clínica</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.numero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Nombres y Apellidos</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.apeNomb}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Nacimiento</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaNacimiento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>DNI</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.nroDocumento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Edad</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.edad}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Genero</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.genero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Modalidad de Contrato</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.modalidadContrato}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Gerencia o Dirección Laboral</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.oficina}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Teléfono</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.celular}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Evaluación</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Evaluación</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaEvaluacion}</TableCell>
                 </TableRow>
                 <TableRow>

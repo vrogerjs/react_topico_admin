@@ -5,9 +5,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { db } from '../../db';
 import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
-  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, InputAdornment
+  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, InputAdornment, Card, CardContent
 } from '@mui/material';
-import { AddTask, Autorenew, CloudUpload, ManageSearch } from '@mui/icons-material';
+import { AddTask, Autorenew, CloudUpload, ControlPoint, ManageSearch } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +42,7 @@ const List = () => {
 
   const navigate = useNavigate();
 
-  const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
+  const [state, setState] = useState({ page: 0, rowsPerPage: 25 });
 
   const [result, setResult] = useState({ size: 0, data: [] });
 
@@ -125,9 +125,9 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('/historiaclinica/pagination');
-      console.log("resulttttaa", result);
+      const result = await http.get('/historiaclinica/' + page + '/' + state.rowsPerPage);
       data.size = result.size;
+      state.totalElements = result.totalElements;
       data.data = data.data.concat(result.content);
     }
     setResult(data);
@@ -168,7 +168,7 @@ const List = () => {
     navigate('/historiaclinica/' + selected[0] + '/atencion');
   }
 
- const uploadOnClick = () => {
+  const uploadOnClick = () => {
     navigate('/historiaclinica/' + selected[0] + '/file');
   }
 
@@ -195,25 +195,26 @@ const List = () => {
     <>
       <Toolbar className="Toolbar-table mt-1" direction="row" >
         <Grid container spacing={2}>
-          <Grid item xs={12} md={1}>
+          <Grid item xs={12} md={2}>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="success">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="info">Atender</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="info">Atender</Button>
           </Grid>
           <Grid item md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="info">Archivos</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="info">Archivos</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
           </Grid>
           {/* <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
           </Grid> */}
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="info">Actualizar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="info">Actualizar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="info">Buscar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="info">Buscar</Button>
           </Grid>
         </Grid>
       </Toolbar>
@@ -222,7 +223,7 @@ const List = () => {
         <Grid item xs={12} md={12}>
           <TextField
             onKeyDown={keyPress}
-            className='m-1'
+            className='p-1'
             margin="normal"
             required
             fullWidth
@@ -242,122 +243,119 @@ const List = () => {
         </Grid>
       </Grid>
 
-      <TableContainer sx={{ maxHeight: '100%' }}>
-        <Fab color="success" aria-label="add"
-          onClick={createOnClick}
-          style={{
-            position: 'absolute',
-            bottom: 72, right: 24
-          }}>
-          <AddIcon />
-        </Fab>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
-                <Checkbox
-                  style={{ color: 'white' }}
-                  indeterminate={selected.length > 0 && selected.length < result.data.length}
-                  checked={result && result.data.length > 0 && selected.length === result.data.length}
-                  onChange={onChangeAllRow}
-                  inputProps={{
-                    'aria-label': 'select all desserts',
-                  }}
-                />
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Historia Clinica
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Oficina
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Paciente
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Nacimiento
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Tipo Documento
-                {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Documento
-                {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Celular
-                {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Modalidad/Contrato
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(result && result.data && result.data.length ? result.data : [])
-              .map((row, index) => {
-                const isItemSelected = isSelected(toID(row));
-                return (
-                  <StyledTableRow
-                    style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
-                    hover
-                    onClick={(event) => onClickRow(event, toID(row))}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={index + ' ' + toID(row)}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox" className='border-table text-table'>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                      />
+      <Card>
+        <CardContent>
+          <TableContainer className='table-container'>
+            <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
+                    <Checkbox
+                      style={{ color: 'white' }}
+                      indeterminate={selected.length > 0 && selected.length < result.data.length}
+                      checked={result && result.data.length > 0 && selected.length === result.data.length}
+                      onChange={onChangeAllRow}
+                      inputProps={{
+                        'aria-label': 'select all desserts',
+                      }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Historia Clinica
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Oficina
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Paciente
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Nacimiento
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Tipo Documento
+                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Documento
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Celular
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Modalidad/Contrato
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(result && result.data && result.data.length ? result.data : [])
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(toID(row));
+                    return (
+                      <StyledTableRow
+                        style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
+                        hover
+                        onClick={(event) => onClickRow(event, toID(row))}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={index + ' ' + toID(row)}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox" className='border-table text-table'>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                          />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table' >
+                          {row.numero}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table' >
+                          {row.paciente.oficina.name}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
+                          {row.paciente.apeNomb}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                          {pad(row.paciente.fechaNacimiento[2], 2)}/{pad(row.paciente.fechaNacimiento[1], 2)}/{row.paciente.fechaNacimiento[0]}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                          {row.paciente.tipoDocumento}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                          {row.paciente.nroDocumento}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                          {row.paciente.celular}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                          {row.paciente.modalidadContrato}
+                        </TableCell>
+                      </StyledTableRow >
+                    );
+                  })}
+                {(!emptyRows) && (
+                  <TableRow style={{ height: 53 }}>
+                    <TableCell colSpan={7} >
+                      No data
                     </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table' >
-                      {row.numero}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table' >
-                      {row.paciente.oficina.name}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
-                      {row.paciente.apeNomb}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
-                      {pad(row.paciente.fechaNacimiento[2], 2)}/{pad(row.paciente.fechaNacimiento[1], 2)}/{row.paciente.fechaNacimiento[0]}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
-                      {row.paciente.tipoDocumento}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
-                      {row.paciente.nroDocumento}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
-                      {row.paciente.celular}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      {row.paciente.modalidadContrato}
-                    </TableCell>
-                  </StyledTableRow >
-                );
-              })}
-            {(!emptyRows) && (
-              <TableRow style={{ height: 53 }}>
-                <TableCell colSpan={7} >
-                  No data
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={result.size}
-        rowsPerPage={state.rowsPerPage}
-        page={state.page}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 50]}
+            component="div"
+            count={state.totalElements}
+            rowsPerPage={state.rowsPerPage}
+            page={state.page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+          />
+        </CardContent>
+      </Card>
+
     </>
   );
 

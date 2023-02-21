@@ -180,7 +180,7 @@ export const Form = () => {
                             width: 120,
                           }}
                           alt="Logo GORE Áncash."
-                          src="https://s3.amazonaws.com/documentos.api.gob.pe/variants/t4kdsvqbhg8ifqy5rwe8c1e9l5dn/69902b317e92a53d1143e9a647f24938e0dca7ffe77ffc33179f197a3298d83a?response-content-disposition=inline%3B%20filename%3D%22Logo%20Vector%20Gore%20Ancash--03.png%22%3B%20filename%2A%3DUTF-8%27%27Logo%2520Vector%2520Gore%2520Ancash--03.png&response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJREKOSPKMJFYJDAQ%2F20230217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230217T172658Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=a730ed594277bc5e3eded9e29b077ff98c12aff120a8211ce9f4ad32a5df57c8"
+                          src={process.env.PUBLIC_URL + "/logo-azul.png"}
                         />
                       </TableCell>
                     </TableRow>

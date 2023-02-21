@@ -200,6 +200,10 @@ textarea {
   padding-top: 20px !important;
 }
 
+.p-1 {
+  padding: 1em !important;
+}
+
 .m-1 {
   margin: 1em !important;
 }
@@ -251,18 +255,23 @@ textarea {
   color: #FFF !important;
 }
 
+.table-container {
+  height: 100% !important;
+  width: 100% !important;
+}
+
 .sidebar-gore {
   background-color: #fff !important;
   color: #000;
   border-radius: 4px;
 }
 
-.MuiPaper-elevation {
+.MuiPaper-elevation0 {
   background-color: #0f62ac !important;
   border: 8px solid #0f62ac !important;
 }
 
-.MuiPaper-elevation4 {
+header.MuiPaper-elevation4 {
   background-color: #0f62ac !important;
   border: 2px solid #FFF !important;
   text-align: center !important;

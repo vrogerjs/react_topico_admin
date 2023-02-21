@@ -69,6 +69,8 @@ export const Form = () => {
           result.fechaEvaluacion = pad(result.fechaEvaluacion[2], 2) + '/' + pad(result.fechaEvaluacion[1], 2) + '/' + result.fechaEvaluacion[0];
           result.imc = result.peso / (result.talla * result.talla);
 
+          result.proximaCita = pad(result.proximaCita[2], 2) + '/' + pad(result.proximaCita[1], 2) + '/' + result.proximaCita[0];
+
           var hoy = new Date()
           var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
           var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
@@ -180,7 +182,7 @@ export const Form = () => {
                             width: 120,
                           }}
                           alt="Logo GORE Áncash."
-                          src="https://s3.amazonaws.com/documentos.api.gob.pe/variants/t4kdsvqbhg8ifqy5rwe8c1e9l5dn/69902b317e92a53d1143e9a647f24938e0dca7ffe77ffc33179f197a3298d83a?response-content-disposition=inline%3B%20filename%3D%22Logo%20Vector%20Gore%20Ancash--03.png%22%3B%20filename%2A%3DUTF-8%27%27Logo%2520Vector%2520Gore%2520Ancash--03.png&response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJREKOSPKMJFYJDAQ%2F20230217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230217T172658Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=a730ed594277bc5e3eded9e29b077ff98c12aff120a8211ce9f4ad32a5df57c8"
+                          src={process.env.PUBLIC_URL + "/logo-azul.png"}
                         />
                       </TableCell>
                     </TableRow>
@@ -211,43 +213,43 @@ export const Form = () => {
                       <TableCell colSpan={10} className='border-table-black bg-table text-white fw-bold'>DATOS PERSONALES DEL PACIENTE</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Número de Historia Clínica</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.numero}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Nombres y Apellidos</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.apeNomb}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Nacimiento</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaNacimiento}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>DNI</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.nroDocumento}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Edad</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.edad}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Genero</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.genero}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Modalidad de Contrato</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.modalidadContrato}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Gerencia o Dirección Laboral</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.oficina}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Teléfono</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.celular}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Evaluación</TableCell>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Evaluación</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaEvaluacion}</TableCell>
                     </TableRow>
                     <TableRow>
@@ -323,7 +325,7 @@ export const Form = () => {
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={10} className='border-table-black p-1-px'>
-                        <Typography dangerouslySetInnerHTML={{ __html: o.proximaCita }} />
+                        {o.proximaCita}
                       </TableCell>
                     </TableRow>
                   </TableBody>

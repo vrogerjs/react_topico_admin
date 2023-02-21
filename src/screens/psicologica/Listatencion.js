@@ -7,7 +7,7 @@ import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
   TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
 } from '@mui/material';
-import { Autorenew, ReplyAll, Visibility } from '@mui/icons-material';
+import { Autorenew, ControlPoint, ReplyAll, Visibility } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
@@ -126,7 +126,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('/psicologica/pagination/' + pid);
+      const result = await http.get('/psicologica/' + page + '/' + state.rowsPerPage + '/' + pid);
 
       const resultHC = await http.get('/historiaclinica/' + pid);
 
@@ -171,10 +171,10 @@ const List = () => {
       o.oficina = oficina;
 
       data.size = result.size;
+      state.totalElements = result.totalElements;
       data.data = data.data.concat(result.content);
     }
     setResult(data);
-    console.log(setResult(data));
   };
 
   const { height, width } = useResize(React);
@@ -227,39 +227,39 @@ const List = () => {
                 <TableCell colSpan={10} className='border-table-black bg-table table-title-main'>DATOS PERSONALES DEL PACIENTE</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Número de Historia Clínica</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.numero}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Nombres y Apellidos</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.nombApe}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Fecha de Nacimiento</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.fechaNacimiento}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>DNI</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.nroDocumento}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Edad</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.edad}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Genero</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.genero}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Modalidad de Contrato</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.modalidadContrato}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Gerencia o Dirección Laboral</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.oficina}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste'>Teléfono</TableCell>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.celular}</TableCell>
               </TableRow>
             </TableBody>
@@ -270,124 +270,123 @@ const List = () => {
       <Toolbar className="Toolbar-table mt-1" direction="row" >
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={1}>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning" className='text-capitalize'>Editar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="success">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="info" className='text-capitalize'>Ver Ficha</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning" className='text-capitalize'>Editar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success" className='text-capitalize'>Actualizar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="info" className='text-capitalize'>Ver Ficha</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: 180, fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary" className='text-capitalize'>Atras</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success" className='text-capitalize'>Actualizar</Button>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary" className='text-capitalize'>Atras</Button>
           </Grid>
           <Grid item xs={12} md={1}>
           </Grid>
         </Grid>
       </Toolbar>
 
-      <TableContainer sx={{ maxHeight: '100%' }}>
-        <Fab color="success" aria-label="add"
-          onClick={createOnClick}
-          style={{
-            position: 'absolute',
-            bottom: 72, right: 24
-          }}>
-          <AddIcon />
-        </Fab>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
-                <Checkbox
-                  style={{ color: 'white' }}
-                  indeterminate={selected.length > 0 && selected.length < result.data.length}
-                  checked={result && result.data.length > 0 && selected.length === result.data.length}
-                  onChange={onChangeAllRow}
-                  inputProps={{
-                    'aria-label': 'select all desserts',
-                  }}
-                />
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Consulta
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Problema Actual
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
-                {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(result && result.data && result.data.length ? result.data : [])
-              .map((row, index) => {
-                const isItemSelected = isSelected(toID(row));
-                return (
-                  <StyledTableRow
-                    style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
-                    hover
-                    onClick={(event) => onClickRow(event, toID(row))}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={index + ' ' + toID(row)}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox" className='border-table text-table'>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                      />
+      <Card>
+        <CardContent>
+          <TableContainer className='table-container'>
+            <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
+                    <Checkbox
+                      style={{ color: 'white' }}
+                      indeterminate={selected.length > 0 && selected.length < result.data.length}
+                      checked={result && result.data.length > 0 && selected.length === result.data.length}
+                      onChange={onChangeAllRow}
+                      inputProps={{
+                        'aria-label': 'select all desserts',
+                      }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Consulta
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Problema Actual
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
+                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(result && result.data && result.data.length ? result.data : [])
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(toID(row));
+                    return (
+                      <StyledTableRow
+                        style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
+                        hover
+                        onClick={(event) => onClickRow(event, toID(row))}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={index + ' ' + toID(row)}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox" className='border-table text-table'>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                          />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
+                          {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
+                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.motivo }} />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.problemaActual }} />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.diagnostico }} />
+                        </TableCell>
+                      </StyledTableRow >
+                    );
+                  })}
+                {(!emptyRows) && (
+                  <TableRow style={{ height: 53 }}>
+                    <TableCell colSpan={7} >
+                      No data
                     </TableCell>
-                    <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
-                      {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.motivo }} />
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.problemaActual }} />
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />
-                    </TableCell>
-                    <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                      <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.diagnostico }} />
-                    </TableCell>
-                  </StyledTableRow >
-                );
-              })}
-            {(!emptyRows) && (
-              <TableRow style={{ height: 53 }}>
-                <TableCell colSpan={7} >
-                  No data
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={result.size}
-        rowsPerPage={state.rowsPerPage}
-        page={state.page}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 50]}
+            component="div"
+            count={state.totalElements}
+            rowsPerPage={state.rowsPerPage}
+            page={state.page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+          />
+        </CardContent>
+      </Card>
     </>
   );
 
