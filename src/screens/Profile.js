@@ -85,7 +85,7 @@ export const Form = () => {
 
   const onClickChangePassword = () => {
     console.log(o);
-    http.post('/api/auth/change-password', { current: o.current, new: o.new, confirm: o.confirm }).then((e) => {
+    http.post('https://web.regionancash.gob.pe/api/auth/change-password', { current: o.current, new: o.new, confirm: o.confirm }).then((e) => {
       if (e.changed) {
         set({ ...o, current: null, new: null, confirm: null });
         dispatch({ type: "snack", msg: 'Contraseña cambiada!' });
