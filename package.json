@@ -9,6 +9,8 @@
     "@capacitor/core": "^4.1.0",
     "@capacitor/geolocation": "^4.0.1",
     "@capacitor/network": "^4.0.1",
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+    "@ckeditor/ckeditor5-react": "^5.0.6",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",

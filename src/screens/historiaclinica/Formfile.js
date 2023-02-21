@@ -89,6 +89,7 @@ export const Form = () => {
             result.oficina = result.paciente.oficina.name;
             result.modalidadContrato = result.paciente.modalidadContrato;
             result.celular = result.paciente.celular;
+            result.id = '';
 
             var hoy = new Date()
             var fechaNacimiento = new Date(result.paciente.fechaNacimiento)
@@ -187,6 +188,13 @@ export const Form = () => {
     // Aquí puedes agregar tu lógica para cargar el archivo en tu backend
   };
 
+  function onChangeFechaRegistro(v) {
+    set(o => ({ ...o, fechaRegistro: v }), () => {
+      o.fechaRegistro = v;
+    });
+
+  }
+
   const onClickSave = async () => {
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
@@ -201,32 +209,17 @@ export const Form = () => {
 
           http.post('https://web.regionancash.gob.pe/api/file/upload', formData, (h) => { delete h.Authorization; return h; }).then(async (result) => {
             o.urlDocumento = result.tempFile;
-            if (temp == 1) {
-              o.id = '';
-              http.post('/file', o).then(async (result) => {
-                if (!o._id) {
-                  if (result.id) {
-                    dispatch({ type: "snack", msg: 'Registro grabado!' });
-                    navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
-                  }
-                  else {
-                    navigate(-1);
-                  }
+            http.post('/file', o).then(async (result) => {
+              if (!o._id) {
+                if (result.id) {
+                  dispatch({ type: "snack", msg: 'Registro grabado!' });
+                  navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
                 }
-              });
-            } else {
-              http.post('/file', o).then(async (result) => {
-                if (!o._id) {
-                  if (result.id) {
-                    dispatch({ type: "snack", msg: 'Registro grabado!' });
-                    navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
-                  }
-                  else {
-                    navigate(-1);
-                  }
+                else {
+                  navigate(-1);
                 }
-              });
-            }
+              }
+            });
           });
         } else {
           http.post('/file', o).then(async (result) => {
@@ -241,9 +234,6 @@ export const Form = () => {
             }
           });
         }
-
-
-
       } else {
         if (!o.id) {
           o.tmpId = 1 * new Date();
@@ -380,6 +370,36 @@ export const Form = () => {
                       ),
                     }}
                     {...defaultProps("name")}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={10} >
+                  <DesktopDatePicker
+                    label="Ingrese la Fecha del Documento Complementario."
+                    inputFormat="DD/MM/YYYY"
+                    value={o.fechaRegistro || ''}
+                    onChange={onChangeFechaRegistro}
+                    renderInput={(params) =>
+                      <TextField
+                        type={'number'}
+                        sx={{ fontWeight: 'bold' }}
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="standard-name"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Keyboard />
+                            </InputAdornment>
+                          ),
+                        }}
+                        {...params}
+                      // {...defaultProps("fechaNacimiento")}
+                      />}
                   />
                 </Grid>
               </Grid>

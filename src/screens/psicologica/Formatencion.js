@@ -2,6 +2,8 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useFormState, useResize, http } from 'gra-react-utils';
 import { VRadioGroup } from '../../utils/useToken';
 import { db } from '../../db';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import {
   ExpandMore as ExpandMoreIcon,
@@ -54,6 +56,16 @@ export const Form = () => {
 
   const [oficinas, setOficinas] = useState([]);
 
+  const [editorData, setEditorData] = useState('');
+
+  const [editorDataPA, setEditorDataPA] = useState('');
+
+  const [editorDataAN, setEditorDataAN] = useState('');
+
+  const [editorDataDI, setEditorDataDI] = useState('');
+
+  const [editorDataRE, setEditorDataRE] = useState('');
+
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
@@ -84,6 +96,7 @@ export const Form = () => {
             result.oficina = result.paciente.oficina.name;
             result.modalidadContrato = result.paciente.modalidadContrato;
             result.celular = result.paciente.celular;
+            result.id='';
 
             var hoy = new Date()
             var fechaNacimiento = new Date(result.paciente.fechaNacimiento)
@@ -151,8 +164,23 @@ export const Form = () => {
 
             result.edad = edad;
             set({ ...o, result });
-
             set(result);
+
+            if (result.motivo)
+              setEditorData(result.motivo);
+
+            if (result.problemaActual)
+              setEditorDataPA(result.problemaActual);
+
+            if (result.anamnesis)
+              setEditorDataAN(result.anamnesis);
+
+            if (result.diagnostico)
+              setEditorDataDI(result.diagnostico);
+
+            if (result.recomendacion)
+              setEditorDataRE(result.recomendacion);
+
           });
         }
       } else {
@@ -219,22 +247,8 @@ export const Form = () => {
 
       if (networkStatus.connected) {
         o.historiaclinica = { id: o.historiaclinica_id };
-
-
         var hoy = new Date();
         o.fechaEvaluacion = hoy;
-        // var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)
-        // var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
-        // var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
-        // if (
-        //   diferenciaMeses < 0 ||
-        //   (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-        // ) {
-        //   edad--
-        // }
-
-        // o.edad = edad;
-
 
         http.post('/psicologica', o).then(async (result) => {
           console.log(result);
@@ -366,17 +380,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Motivo de la Consulta: "
-                    placeholder="Motivo de la Consulta."
-                    {...defaultProps("motivo")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorData}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorData(data);
+                      o.motivo = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -395,17 +406,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Problema Actual: "
-                    placeholder="Problema Actual"
-                    {...defaultProps("problemaActual")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataPA}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataPA(data);
+                      o.problemaActual = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -424,17 +432,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese la Anamnesis (Datos Relevantes): "
-                    placeholder="Anamnesis"
-                    {...defaultProps("anamnesis")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataAN}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataAN(data);
+                      o.anamnesis = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -453,17 +458,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Diagnóstico Presuntivo: "
-                    placeholder="Diagnóstico Presuntivo"
-                    {...defaultProps("diagnostico")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataDI}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataDI(data);
+                      o.diagnostico = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -482,17 +484,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese las Recomendaciones: "
-                    placeholder="Recomendaciones"
-                    {...defaultProps("recomendacion")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataRE}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataRE(data);
+                      o.recomendacion = data;
+                    }}
                   />
                 </Grid>
               </Grid>

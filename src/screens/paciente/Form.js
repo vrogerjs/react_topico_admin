@@ -47,7 +47,8 @@ export const Form = () => {
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
-
+    'tipoDocumento': 'DNI',
+    'genero': 'Masculino',
   }, {});
 
   const pad = (num, places) => String(num).padStart(places, '0')
@@ -359,7 +360,7 @@ export const Form = () => {
                         // onChange: onChangeTipoDocumento
                       })}
                     >
-                      {['Femenino', 'Masculino'].map((item, i) => (
+                      {['Masculino', 'Femenino'].map((item, i) => (
                         <MenuItem key={'houseAccess_' + i} value={item}>
                           {item}
                         </MenuItem>

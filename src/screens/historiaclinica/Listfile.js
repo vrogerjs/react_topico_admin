@@ -263,16 +263,16 @@ const List = () => {
           <Grid item xs={12} md={2}>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="success">Nuevo</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning" className='text-capitalize'>Editar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success" className='text-capitalize'>Actualizar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary" className='text-capitalize'>Atras</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary">Atras</Button>
           </Grid>
           <Grid item xs={12} md={2}>
           </Grid>
@@ -295,6 +295,9 @@ const List = () => {
                         'aria-label': 'select all desserts',
                       }}
                     />
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha del Documento
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                   <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Nombre del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
@@ -324,6 +327,9 @@ const List = () => {
                             color="primary"
                             checked={isItemSelected}
                           />
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' >
+                          {pad(row.fechaRegistro[2], 2)}/{pad(row.fechaRegistro[1], 2)}/{row.fechaRegistro[0]}
                         </TableCell>
                         <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
                           {row.name}

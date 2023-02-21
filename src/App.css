@@ -98,7 +98,7 @@ textarea {
 }
 
 .bg-gore {
-  background-color: #0f62ac !important;
+  background-color: #00AEED !important;
 }
 
 .bg-table {
@@ -142,7 +142,7 @@ textarea {
 }
 
 .color-gore {
-  color: #0f62ac !important;
+  color: #00AEED !important;
 }
 
 .text-black {
@@ -224,6 +224,10 @@ textarea {
   margin-right: 1em !important;
 }
 
+.ckeditor-height {
+  height: 250px !important;
+}
+
 .select {
   white-space: unset !important;
 }
@@ -267,19 +271,19 @@ textarea {
 }
 
 .MuiPaper-elevation0 {
-  background-color: #0f62ac !important;
-  border: 8px solid #0f62ac !important;
+  background-color: #00AEED !important;
+  border: 8px solid #00AEED !important;
 }
 
 header.MuiPaper-elevation4 {
-  background-color: #0f62ac !important;
+  background-color: #00AEED !important;
   border: 2px solid #FFF !important;
   text-align: center !important;
 }
 
 /* .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
-  background-color: #0f62ac !important;
-  border: 8px solid #0f62ac !important;
+  background-color: #00AEED !important;
+  border: 8px solid #00AEED !important;
 } */
 
 /* ul.MuiList-root.MuiList-padding.css-h4y409-MuiList-root {
@@ -289,7 +293,7 @@ header.MuiPaper-elevation4 {
 } */
 /* 
 header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed.css-zxtyt4-MuiPaper-root-MuiAppBar-root {
-  background-color: #0f62ac !important;
+  background-color: #00AEED !important;
   border: 2px solid #FFF !important;
   text-align: center !important;
 } */

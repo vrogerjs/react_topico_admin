@@ -329,14 +329,14 @@ export const Form = () => {
                       <TableCell align='right' colSpan={10} className='espacio-table'>
                       </TableCell>
                     </TableRow>
-                    <TableRow>
+                    {/* <TableRow>
                       <TableCell colSpan={10} className='border-table-black bg-table text-white fw-bold'>5. EXAMENES COMPLEMENTARIOS</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={10} className='border-table-black p-1-px'>
                         <Typography dangerouslySetInnerHTML={{ __html: o.examenComplementario }} />
                       </TableCell>
-                    </TableRow>
+                    </TableRow> */}
                     <TableRow>
                       <TableCell align='right' colSpan={10} className='espacio-table'>
                       </TableCell>

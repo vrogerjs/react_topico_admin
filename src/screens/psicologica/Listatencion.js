@@ -273,19 +273,19 @@ const List = () => {
           <Grid item xs={12} md={1}>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="success">Nuevo</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning" className='text-capitalize'>Editar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="info" className='text-capitalize'>Ver Ficha</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="primary">Ver Ficha</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="success" className='text-capitalize'>Actualizar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary" className='text-capitalize'>Atras</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary">Atras</Button>
           </Grid>
           <Grid item xs={12} md={1}>
           </Grid>

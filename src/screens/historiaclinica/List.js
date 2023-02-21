@@ -196,25 +196,22 @@ const List = () => {
       <Toolbar className="Toolbar-table mt-1" direction="row" >
         <Grid container spacing={2}>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="success">Nuevo</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="info">Atender</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="primary">Atender</Button>
           </Grid>
           <Grid item md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="info">Archivos</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="primary">Archivos</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
-          </Grid>
-          {/* <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
-          </Grid> */}
-          <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="info">Actualizar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="info">Buscar</Button>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickSearch} startIcon={<ManageSearch />} variant="contained" color="primary">Buscar</Button>
           </Grid>
         </Grid>
       </Toolbar>

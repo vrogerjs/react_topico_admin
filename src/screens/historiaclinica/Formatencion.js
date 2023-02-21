@@ -2,6 +2,8 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useFormState, useResize, http } from 'gra-react-utils';
 import { VRadioGroup } from '../../utils/useToken';
 import { db } from '../../db';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import {
   ExpandMore as ExpandMoreIcon,
@@ -54,11 +56,21 @@ export const Form = () => {
 
   const [oficinas, setOficinas] = useState([]);
 
+  const [editorData, setEditorData] = useState('');
+
+  const [editorDataEM, setEditorDataEM] = useState('');
+
+  const [editorDataOM, setEditorDataOM] = useState('');
+
+  const [editorDataNE, setEditorDataNE] = useState('');
+
+  const [editorDataIR, setEditorDataIR] = useState('');
+
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
 
-  }, {});
+  });
 
   const pad = (num, places) => String(num).padStart(places, '0')
 
@@ -79,13 +91,15 @@ export const Form = () => {
             result.numero = result.numero;
             result.apeNomb = result.paciente.apeNomb;
             result.nroDocumento = result.paciente.nroDocumento;
-            result.fechaNacimiento = result.paciente.fechaNacimiento[2] + '/' + result.paciente.fechaNacimiento[1] + '/' + result.paciente.fechaNacimiento[0];
+            result.fechaNacimiento = pad(result.paciente.fechaNacimiento[2], 2) + '/' + pad(result.paciente.fechaNacimiento[1], 2) + '/' + result.paciente.fechaNacimiento[0];
             result.genero = result.paciente.genero;
             result.oficina = result.paciente.oficina.name;
             result.modalidadContrato = result.paciente.modalidadContrato;
             result.celular = result.paciente.celular;
+            result.id = '';
 
             var hoy = new Date()
+            result.fechaEvaluacion = pad(hoy.getDate(), 2) + '/' + pad((hoy.getMonth() + 1), 2) + '/' + hoy.getFullYear();
             var fechaNacimiento = new Date(result.paciente.fechaNacimiento)
             var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
             var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
@@ -98,7 +112,6 @@ export const Form = () => {
 
             result.edad = edad;
             set({ ...o, result });
-
             set(result);
           });
         }
@@ -132,12 +145,12 @@ export const Form = () => {
             result.numero = result.historiaclinica.numero;
             result.apeNomb = result.historiaclinica.paciente.apeNomb;
             result.nroDocumento = result.historiaclinica.paciente.nroDocumento;
-            result.fechaNacimiento = result.historiaclinica.paciente.fechaNacimiento[2] + '/' + result.historiaclinica.paciente.fechaNacimiento[1] + '/' + result.historiaclinica.paciente.fechaNacimiento[0];
+            result.fechaNacimiento = pad(result.historiaclinica.paciente.fechaNacimiento[2], 2) + '/' + pad(result.historiaclinica.paciente.fechaNacimiento[1], 2) + '/' + result.historiaclinica.paciente.fechaNacimiento[0];
             result.genero = result.historiaclinica.paciente.genero;
             result.oficina = result.historiaclinica.paciente.oficina.name;
             result.modalidadContrato = result.historiaclinica.paciente.modalidadContrato;
             result.celular = result.historiaclinica.paciente.celular;
-
+            result.fechaEvaluacion = pad(result.fechaEvaluacion[2], 2) + '/' + pad(result.fechaEvaluacion[1], 2) + '/' + result.fechaEvaluacion[0];
             var hoy = new Date()
             var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
             var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
@@ -151,8 +164,23 @@ export const Form = () => {
 
             result.edad = edad;
             set({ ...o, result });
-
             set(result);
+
+            if (result.anamnesis)
+              setEditorData(result.anamnesis);
+
+            if (result.evolucionMedica)
+              setEditorDataEM(result.evolucionMedica);
+
+            if (result.ordenMedica)
+              setEditorDataOM(result.ordenMedica);
+
+            if (result.notaEnfermeria)
+              setEditorDataNE(result.notaEnfermeria);
+
+            if (result.interConsulta)
+              setEditorDataIR(result.interConsulta);
+
           });
         }
       } else {
@@ -216,28 +244,11 @@ export const Form = () => {
   const onClickSave = async () => {
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
-
       if (networkStatus.connected) {
         o.historiaclinica = { id: o.historiaclinica_id };
-
-
         var hoy = new Date();
         o.fechaEvaluacion = hoy;
-        // var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)
-        // var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
-        // var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
-        // if (
-        //   diferenciaMeses < 0 ||
-        //   (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-        // ) {
-        //   edad--
-        // }
-
-        // o.edad = edad;
-
-
         http.post('/atencion', o).then(async (result) => {
-          console.log(result);
           if (!o._id) {
             if (result.id) {
               dispatch({ type: "snack", msg: 'Registro grabado!' });
@@ -264,11 +275,9 @@ export const Form = () => {
     }
   };
 
-  function onChangeFechaNacimiento(v) {
-    set(o => ({ ...o, fechaNacimiento: v }), () => {
-      o.fechaNacimiento = v;
-    });
-
+  const onKeyUpTalla = (event) => {
+    var v = (o.peso) / (o.talla * o.talla);
+    set({ ...o, imc: v });
   }
 
   const onSubmit = data => console.log(data);
@@ -278,7 +287,7 @@ export const Form = () => {
       // Name of the component ⚛️
       MuiInput: {
         defaultProps: {
-          required: true
+          required: false
         }
       },
     },
@@ -370,7 +379,6 @@ export const Form = () => {
                 <Grid item xs={12} md={3}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -385,13 +393,12 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("presion")}
+                    {...defaultProps("presion", { required: false })}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -399,20 +406,19 @@ export const Form = () => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          bpm
+                          X'
                         </InputAdornment>
                       ),
                       inputProps: {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("frecuenciaCardiaca")}
+                    {...defaultProps("frecuenciaCardiaca", { required: false })}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -427,7 +433,7 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("frecuenciaRespiratoria")}
+                    {...defaultProps("frecuenciaRespiratoria", { required: false })}
                   />
                 </Grid>
               </Grid>
@@ -438,7 +444,6 @@ export const Form = () => {
                 <Grid item xs={12} md={5}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -453,13 +458,12 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("saturacion")}
+                    {...defaultProps("saturacion", { required: false })}
                   />
                 </Grid>
                 <Grid item xs={12} md={5}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -474,7 +478,7 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("temperatura")}
+                    {...defaultProps("temperatura", { required: false })}
                   />
                 </Grid>
               </Grid>
@@ -485,7 +489,6 @@ export const Form = () => {
                 <Grid item xs={12} md={3}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -500,17 +503,17 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("peso")}
+                    {...defaultProps("peso", { required: false })}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
                     label="Talla:"
+                    onKeyUp={onKeyUpTalla}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -521,13 +524,12 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("talla")}
+                    {...defaultProps("talla", { required: false })}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     size="medium"
                     id="standard-name"
@@ -543,7 +545,7 @@ export const Form = () => {
                         style: { textAlign: "right" },
                       }
                     }}
-                    {...defaultProps("imc")}
+                    {...defaultProps("imc", { required: false })}
                   />
                 </Grid>
               </Grid>
@@ -562,17 +564,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese el Anamnesis: "
-                    placeholder="Anamnesis"
-                    {...defaultProps("anamnesis")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorData}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorData(data);
+                      o.anamnesis = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -591,17 +590,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese la Evolución Médica: "
-                    placeholder="Evolución Médica"
-                    {...defaultProps("evolucionMedica")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataEM}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataEM(data);
+                      o.evolucionMedica = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -620,17 +616,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese la Orden Médica: "
-                    placeholder="Orden Médica"
-                    {...defaultProps("ordenMedica")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataOM}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataOM(data);
+                      o.ordenMedica = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -649,24 +642,21 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese las Notas de Enfermería: "
-                    placeholder="Notas de Enfermería"
-                    {...defaultProps("notaEnfermeria")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataNE}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataNE(data);
+                      o.notaEnfermeria = data;
+                    }}
                   />
                 </Grid>
               </Grid>
             </AccordionDetails>
           </Accordion>
 
-          <Accordion className='border-white'>
+          {/* <Accordion className='border-white'>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel2a-content"
@@ -678,22 +668,22 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese los Exámenes Complementarios: "
-                    placeholder="Exámenes Complementarios"
-                    {...defaultProps("examenComplementario")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorData}
+                    onReady={(editor) => {
+                      // console.log('Editor listo', editor);
+                    }}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorData(data);
+                      o.examenComplementario = data;
+                    }}
                   />
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
 
           <Accordion className='border-white'>
             <AccordionSummary
@@ -707,17 +697,14 @@ export const Form = () => {
             <AccordionDetails>
               <Grid container>
                 <Grid item xs={12} md={12}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    multiline
-                    size="medium"
-                    rows={4}
-                    id="standard-name"
-                    label="Ingrese las Interconsultas y/o Referencias: "
-                    placeholder="Interconsultas y/o Referencias"
-                    {...defaultProps("interConsulta")}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={editorDataIR}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setEditorDataIR(data);
+                      o.interConsulta = data;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -730,16 +717,6 @@ export const Form = () => {
           alignItems="center" spacing={1}>
           {getActions()}
         </Stack>
-
-        {/* {(o._id || o.id) && <Fab color="primary" aria-label="add"
-          onClick={onClickAdd}
-          style={{
-            position: 'absolute',
-            bottom: 80, right: 24
-          }}>
-          <AddIcon />
-        </Fab>} */}
-
       </form>
     </ThemeProvider></LocalizationProvider>
   }

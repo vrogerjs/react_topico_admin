@@ -127,8 +127,8 @@ const HomePage = ({ logOut, match }) => {
             // maxWidth: { xs: 350, md: 250 },
           }}
           alt="Logo GORE Áncash."
-          src="https://web.regionancash.gob.pe/fs/images/logo2018.png"
-        />
+          src={process.env.PUBLIC_URL + "/logo2018.png"}
+          />
       </Toolbar>
       <Divider />
       <List className='sidebar-gore'>
