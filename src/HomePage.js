@@ -128,7 +128,7 @@ const HomePage = ({ logOut, match }) => {
           }}
           alt="Logo GORE Áncash."
           src={process.env.PUBLIC_URL + "/logo2018.png"}
-          />
+        />
       </Toolbar>
       <Divider />
       <List className='sidebar-gore'>
@@ -324,6 +324,8 @@ const HomePage = ({ logOut, match }) => {
       >
         <Toolbar className="_" />
         <Routes>
+
+        <Route path={`/`} element={<HistoriaclinicaList setO={setO} />} />
 
           {/* Paciente */}
           <Route path={`/paciente`} element={<PacienteList setO={setO} />} />
