@@ -79,6 +79,8 @@ const List = () => {
 
   const { pid } = useParams();
 
+  const { aid } = useParams();
+
   const onClickRow = (event, code) => {
     const selectedIndex = selected.indexOf(code);
 
@@ -120,12 +122,12 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('/file/' + page + '/' + state.rowsPerPage + '/' + pid);
+      const result = await http.get('/file/' + page + '/' + state.rowsPerPage + '/' + aid);
 
-      const resultHC = await http.get('/historiaclinica/' + pid);
+      const resultA = await http.get('/atencion/' + aid);
 
       var hoy = new Date()
-      var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)
+      var fechaNacimiento = new Date(resultA.historiaclinica.paciente.fechaNacimiento)
       var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
       var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
       if (
@@ -137,31 +139,31 @@ const List = () => {
 
       o.edad = edad;
 
-      var historiaclinica_id = resultHC.id;
-      o.historiaclinica_id = historiaclinica_id;
+      var atencion_id = resultA.id;
+      o.atencion_id = atencion_id;
 
-      var numero = resultHC.numero;
+      var numero = resultA.historiaclinica.numero;
       o.numero = numero;
 
-      var nombApe = resultHC.paciente.apeNomb;
+      var nombApe = resultA.historiaclinica.paciente.apeNomb;
       o.nombApe = nombApe;
 
-      var nroDocumento = resultHC.paciente.nroDocumento;
+      var nroDocumento = resultA.historiaclinica.paciente.nroDocumento;
       o.nroDocumento = nroDocumento;
 
-      var genero = resultHC.paciente.genero;
+      var genero = resultA.historiaclinica.paciente.genero;
       o.genero = genero;
 
-      var fechaNacimiento = pad(resultHC.paciente.fechaNacimiento[2], 2) + '/' + pad(resultHC.paciente.fechaNacimiento[1], 2) + '/' + resultHC.paciente.fechaNacimiento[0];
+      var fechaNacimiento = pad(resultA.historiaclinica.paciente.fechaNacimiento[2], 2) + '/' + pad(resultA.historiaclinica.paciente.fechaNacimiento[1], 2) + '/' + resultA.historiaclinica.paciente.fechaNacimiento[0];
       o.fechaNacimiento = fechaNacimiento;
 
-      var modalidadContrato = resultHC.paciente.modalidadContrato;
+      var modalidadContrato = resultA.historiaclinica.paciente.modalidadContrato;
       o.modalidadContrato = modalidadContrato;
 
-      var celular = resultHC.paciente.celular;
+      var celular = resultA.historiaclinica.paciente.celular;
       o.celular = celular;
 
-      var oficina = resultHC.paciente.oficina.name;
+      var oficina = resultA.historiaclinica.paciente.oficina.name;
       o.oficina = oficina;
 
       data.size = result.size;
@@ -193,15 +195,15 @@ const List = () => {
   }, [state.page, state.rowsPerPage]);
 
   const createOnClick = () => {
-    navigate('/historiaclinica/file/create/' + o.historiaclinica_id + '/1');
+    navigate('/atencion/file/create/' + o.atencion_id + '/1');
   };
 
   const editOnClick = () => {
-    navigate('/historiaclinica/file/' + selected[0] + '/edit/2');
+    navigate('/atencion/file/' + selected[0] + '/edit/2');
   }
 
   const onClickBack = () => {
-    navigate('/historiaclinica', { replace: true });
+    navigate(-1);
   }
 
   const toID = (row) => {

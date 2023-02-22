@@ -168,10 +168,6 @@ const List = () => {
     navigate('/historiaclinica/' + selected[0] + '/atencion');
   }
 
-  const uploadOnClick = () => {
-    navigate('/historiaclinica/' + selected[0] + '/file');
-  }
-
   const deleteOnClick = () => {
     dispatch({
       type: "confirm", msg: 'Esta seguro de eliminar el registro seleccionado?', cb: (e) => {
@@ -195,14 +191,13 @@ const List = () => {
     <>
       <Toolbar className="Toolbar-table mt-1" direction="row" >
         <Grid container spacing={2}>
+          <Grid item xs={12} md={1}>
+          </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<AddTask />} onClick={atencionOnClick} variant="contained" color="primary">Atender</Button>
-          </Grid>
-          <Grid item md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="primary">Archivos</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>

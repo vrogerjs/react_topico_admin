@@ -45,9 +45,9 @@ export const Form = () => {
 
   const networkStatus = useSelector((state) => state.networkStatus);
 
-  const { pid } = useParams();
-
   const { fid } = useParams();
+
+  const { aid } = useParams();
 
   const { temp } = useParams();
 
@@ -68,7 +68,7 @@ export const Form = () => {
   const pad = (num, places) => String(num).padStart(places, '0')
 
   useEffect(() => {
-    dispatch({ type: 'title', title: (pid ? 'Actualizar' : 'Registrar') + ' Paciente.' });
+    dispatch({ type: 'title', title: (aid ? 'Actualizar' : 'Registrar') + ' Paciente.' });
     [].forEach(async (e) => {
       e[1](await db[e[0]].toArray());
     });
@@ -76,23 +76,23 @@ export const Form = () => {
 
   useEffect(() => {
     if (temp == 1) {
-      if (pid) {
+      if (aid) {
         if (networkStatus.connected) {
-          http.get('/historiaclinica/' + pid).then((result) => {
+          http.get('/atencion/' + aid).then((result) => {
 
-            result.historiaclinica_id = result.id;
-            result.numero = result.numero;
-            result.apeNomb = result.paciente.apeNomb;
-            result.nroDocumento = result.paciente.nroDocumento;
-            result.fechaNacimiento = result.paciente.fechaNacimiento[2] + '/' + result.paciente.fechaNacimiento[1] + '/' + result.paciente.fechaNacimiento[0];
-            result.genero = result.paciente.genero;
-            result.oficina = result.paciente.oficina.name;
-            result.modalidadContrato = result.paciente.modalidadContrato;
-            result.celular = result.paciente.celular;
+            result.atencion_id = result.id;
+            result.numero = result.historiaclinica.numero;
+            result.apeNomb = result.historiaclinica.paciente.apeNomb;
+            result.nroDocumento = result.historiaclinica.paciente.nroDocumento;
+            result.fechaNacimiento = result.historiaclinica.paciente.fechaNacimiento[2] + '/' + result.historiaclinica.paciente.fechaNacimiento[1] + '/' + result.historiaclinica.paciente.fechaNacimiento[0];
+            result.genero = result.historiaclinica.paciente.genero;
+            result.oficina = result.historiaclinica.paciente.oficina.name;
+            result.modalidadContrato = result.historiaclinica.paciente.modalidadContrato;
+            result.celular = result.historiaclinica.paciente.celular;
             result.id = '';
 
             var hoy = new Date()
-            var fechaNacimiento = new Date(result.paciente.fechaNacimiento)
+            var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
             var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
             var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
             if (
@@ -114,18 +114,18 @@ export const Form = () => {
         if (networkStatus.connected) {
           http.get('/file/' + fid).then((result) => {
 
-            result.historiaclinica_id = result.historiaclinica.id;
-            result.numero = result.historiaclinica.numero;
-            result.apeNomb = result.historiaclinica.paciente.apeNomb;
-            result.nroDocumento = result.historiaclinica.paciente.nroDocumento;
-            result.fechaNacimiento = result.historiaclinica.paciente.fechaNacimiento[2] + '/' + result.historiaclinica.paciente.fechaNacimiento[1] + '/' + result.historiaclinica.paciente.fechaNacimiento[0];
-            result.genero = result.historiaclinica.paciente.genero;
-            result.oficina = result.historiaclinica.paciente.oficina.name;
-            result.modalidadContrato = result.historiaclinica.paciente.modalidadContrato;
-            result.celular = result.historiaclinica.paciente.celular;
+            result.atencion_id = result.atencion.id;
+            result.numero = result.atencion.historiaclinica.numero;
+            result.apeNomb = result.atencion.historiaclinica.paciente.apeNomb;
+            result.nroDocumento = result.atencion.historiaclinica.paciente.nroDocumento;
+            result.fechaNacimiento = result.atencion.historiaclinica.paciente.fechaNacimiento[2] + '/' + result.atencion.historiaclinica.paciente.fechaNacimiento[1] + '/' + result.atencion.historiaclinica.paciente.fechaNacimiento[0];
+            result.genero = result.atencion.historiaclinica.paciente.genero;
+            result.oficina = result.atencion.historiaclinica.paciente.oficina.name;
+            result.modalidadContrato = result.atencion.historiaclinica.paciente.modalidadContrato;
+            result.celular = result.atencion.historiaclinica.paciente.celular;
 
             var hoy = new Date()
-            var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
+            var fechaNacimiento = new Date(result.atencion.historiaclinica.paciente.fechaNacimiento)
             var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
             var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
             if (
@@ -143,7 +143,7 @@ export const Form = () => {
         }
       }
     }
-  }, [pid]);
+  }, [aid]);
 
   const { width, height } = useResize(React);
 
@@ -171,28 +171,13 @@ export const Form = () => {
   };
 
   const onClickCancel = () => {
-    navigate(-1);
+    navigate('/historiaclinica/' + o.atencion_id + '/atencion');
   }
-
-  const onClickAdd = async () => {
-    // navigate('/paciente/create', { replace: true });
-  }
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleUpload = (event) => {
-    console.log('Uploading file:', event);
-    setFile(event);
-    // Aquí puedes agregar tu lógica para cargar el archivo en tu backend
-  };
 
   function onChangeFechaRegistro(v) {
     set(o => ({ ...o, fechaRegistro: v }), () => {
       o.fechaRegistro = v;
     });
-
   }
 
   const onClickSave = async () => {
@@ -200,7 +185,7 @@ export const Form = () => {
     if (0 || form != null && validate(form)) {
 
       if (networkStatus.connected) {
-        o.historiaclinica = { id: o.historiaclinica_id };
+        o.atencion = { id: o.atencion_id };
 
         if (file) {
           const formData = new FormData();
@@ -210,28 +195,30 @@ export const Form = () => {
           http.post('https://web.regionancash.gob.pe/api/file/upload', formData, (h) => { delete h.Authorization; return h; }).then(async (result) => {
             o.urlDocumento = result.tempFile;
             http.post('/file', o).then(async (result) => {
-              if (!o._id) {
-                if (result.id) {
-                  dispatch({ type: "snack", msg: 'Registro grabado!' });
-                  navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
-                }
-                else {
-                  navigate(-1);
-                }
-              }
-            });
-          });
-        } else {
-          http.post('/file', o).then(async (result) => {
-            if (!o._id) {
+              console.log('resulttttttttttttttttt', result)
               if (result.id) {
                 dispatch({ type: "snack", msg: 'Registro grabado!' });
-                navigate('/historiaclinica/' + o.historiaclinica_id + '/file', { replace: true });
+                navigate('/atencion/' + o.atencion_id + '/file', { replace: true });
               }
               else {
                 navigate(-1);
               }
+
+            });
+          });
+        } else {
+          console.log('envioooooo', o);
+          http.post('/file', o).then(async (result) => {
+            console.log('resulttttttttttttttttt edittt', result)
+
+            if (result.id) {
+              dispatch({ type: "snack", msg: 'Registro grabado!' });
+              navigate('/atencion/' + o.atencion_id + '/file', { replace: true });
             }
+            else {
+              navigate(-1);
+            }
+
           });
         }
       } else {
@@ -293,43 +280,43 @@ export const Form = () => {
                   <TableCell colSpan={10} className='border-table-black bg-table table-title-main'>DATOS PERSONALES DEL PACIENTE</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Número de Historia Clínica</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.numero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Nombres y Apellidos</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.apeNomb}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Nacimiento</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaNacimiento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>DNI</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.nroDocumento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Edad</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.edad}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Genero</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.genero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Modalidad de Contrato</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.modalidadContrato}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Gerencia o Dirección Laboral</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.oficina}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Teléfono</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.celular}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste'>Fecha de Evaluación</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Evaluación</TableCell>
                   <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaEvaluacion}</TableCell>
                 </TableRow>
                 <TableRow>

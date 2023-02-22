@@ -276,7 +276,7 @@ export const Form = () => {
   };
 
   const onKeyUpTalla = (event) => {
-    var v = (o.peso) / (o.talla * o.talla);
+    var v = parseFloat((o.peso) / (o.talla * o.talla)).toFixed(2);
     set({ ...o, imc: v });
   }
 

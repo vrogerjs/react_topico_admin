@@ -344,10 +344,10 @@ const HomePage = ({ logOut, match }) => {
           <Route path={`/historiaclinica/atencion/create/:pid/:temp`} element={<HistoriaclinicaFormatencion />} />
           <Route path={`/historiaclinica/atencion/:pid/edit/:temp`} element={<HistoriaclinicaFormatencion />} />
 
-          <Route path={`/historiaclinica/:pid/file`} element={<HistoriaclinicaListfile />} />
-          <Route path={`/historiaclinica/file/create/:pid/:temp`} element={<HistoriaclinicaFormfile />} />
-          <Route path={`/historiaclinica/file/:fid/edit/:temp`} element={<HistoriaclinicaFormfile />} />
-
+          {/* Examenes Complementarios */}
+          <Route path={`/atencion/:aid/file`} element={<HistoriaclinicaListfile />} />
+          <Route path={`/atencion/file/create/:aid/:temp`} element={<HistoriaclinicaFormfile />} />
+          <Route path={`/atencion/file/:fid/edit/:temp`} element={<HistoriaclinicaFormfile />} />
 
 
           {/* Reporte de Atención Medica */}

@@ -7,7 +7,7 @@ import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
   TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
 } from '@mui/material';
-import { Autorenew, ControlPoint, ReplyAll, Visibility } from '@mui/icons-material';
+import { Autorenew, CloudUpload, ControlPoint, ReplyAll, Visibility } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
@@ -215,6 +215,10 @@ const List = () => {
     navigate('/historiaclinica', { replace: true });
   }
 
+  const uploadOnClick = () => {
+    navigate('/atencion/' + selected[0] + '/file');
+  }
+
   const toID = (row) => {
     return row._id && row._id.$oid ? row._id.$oid : row.id;
   }
@@ -271,10 +275,11 @@ const List = () => {
       <Toolbar className="Toolbar-table mt-1" direction="row" >
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={1}>
-          </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
+          </Grid>
+          <Grid item md={2}>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="primary">Exámenes</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
@@ -287,8 +292,6 @@ const List = () => {
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary">Atras</Button>
-          </Grid>
-          <Grid item xs={12} md={1}>
           </Grid>
         </Grid>
       </Toolbar>
