@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { db } from '../../db';
 import {
-  Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
+  Button, Checkbox, styled, Table, TableCell, TablePagination,
   TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, CardContent, Card
 } from '@mui/material';
 import { Autorenew, ControlPoint } from '@mui/icons-material';
@@ -181,11 +179,10 @@ const List = () => {
         </Grid>
       </Toolbar>
 
-
       <Card>
         <CardContent>
           <TableContainer className='table-container'>
-            <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%'}} >
+            <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }} >
               <TableHead>
                 <TableRow>
                   <StyledTableCell padding="checkbox" className='bg-gore border-table'>

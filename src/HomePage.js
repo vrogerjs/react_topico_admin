@@ -109,6 +109,14 @@ const HomePage = ({ logOut, match }) => {
       ]
     },
     {
+      perms: 'DISABLED_REGISTER', text: 'Reportes', icon: <QuizIcon />, path: '/reporte', items: [
+        { text: 'Reporte por Fechas', icon: <AddIcon />, path: '/reporte/fecha' },
+        { text: 'Reporte Tipo Contrato', icon: <AddIcon />, path: '/reporte/tipocontrato' },
+        { text: 'Reporte Paciente Recurrente', icon: <AddIcon />, path: '/reporte/pacienterecurrente' },
+        { text: 'Reporte Rango de Edad', icon: <AddIcon />, path: '/reporte/edad' }
+      ]
+    },
+    {
       text: 'Salir', icon: <LogoutIcon />, onClick: () => {
         logOut();
       }
@@ -255,6 +263,13 @@ const HomePage = ({ logOut, match }) => {
     .then(module => ({ default: module.Form }))
   );
 
+  // Reportes
+  const ReporteListfecha = lazyLoader(() => import('./screens/reporte/Listfecha'));
+  const ReporteListtipocontrato = lazyLoader(() => import('./screens/reporte/Listtipocontrato'));
+  const ReporteListpacienterecurrente = lazyLoader(() => import('./screens/reporte/Listpacienterecurrente'));
+  const ReporteListedad = lazyLoader(() => import('./screens/reporte/Listedad'));
+
+
   const UserList = lazyLoader(() => import('./screens/user/List'));
 
   const UserForm = lazyLoader(() => import('./screens/user/Form')
@@ -325,7 +340,7 @@ const HomePage = ({ logOut, match }) => {
         <Toolbar className="_" />
         <Routes>
 
-        <Route path={`/`} element={<HistoriaclinicaList setO={setO} />} />
+          <Route path={`/`} element={<HistoriaclinicaList setO={setO} />} />
 
           {/* Paciente */}
           <Route path={`/paciente`} element={<PacienteList setO={setO} />} />
@@ -366,6 +381,14 @@ const HomePage = ({ logOut, match }) => {
 
           {/* Reporte de Atención Psicologica */}
           <Route path={`/psicologica/atencion/:pid`} element={<PsicologicaFormview />} />
+
+          {/* Reportes */}
+          <Route path={`/reporte/fecha`} element={<ReporteListfecha setO={setO} />} />
+          <Route path={`/reporte/tipocontrato`} element={<ReporteListtipocontrato setO={setO} />} />
+          <Route path={`/reporte/pacienterecurrente`} element={<ReporteListpacienterecurrente setO={setO} />} />
+          <Route path={`/reporte/edad`} element={<ReporteListedad setO={setO} />} />
+
+
 
           <Route path={`/user`} element={<UserList setO={setO} />} />
           <Route path={`/user/create`} element={<UserForm />} />

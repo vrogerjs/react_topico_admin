@@ -173,6 +173,10 @@ textarea {
   text-transform: capitalize !important;
 }
 
+.text-uppercase{
+  text-transform: uppercase !important;
+}
+
 .cursor-pointer {
   cursor: pointer !important;
 }
@@ -202,6 +206,10 @@ textarea {
 
 .p-1 {
   padding: 1em !important;
+}
+
+.mt-1-5 {
+  margin-top: 1.5em !important;
 }
 
 .m-1 {
@@ -260,8 +268,50 @@ textarea {
 }
 
 .table-container {
-  height: 100% !important;
-  width: 100% !important;
+  overflow-x: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.bg-poco-peso {
+  background-color: #21a6f3 !important;
+  color: #fff !important;
+}
+
+.bg-normal {
+  background-color: #40bc64 !important;
+  color: #fff !important;
+}
+
+.bg-sobre-peso {
+  background-color: #fc4737 !important;
+  color: #fff !important;
+}
+
+.bg-white {
+  background-color: #FFF !important;
+}
+
+.bg-red {
+  background-color: red !important;
+  color: #FFF !important;
+}
+
+.bg-yellow {
+  background-color: yellow !important;
+}
+
+.bg-green {
+  background-color: green !important;
+  color: #FFF !important;
+}
+
+.bg-cherry {
+  background-color: #800040 !important;
+  color: #FFF !important;
 }
 
 .sidebar-gore {

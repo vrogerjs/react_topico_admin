@@ -49,6 +49,8 @@ export const Form = () => {
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
     'tipoDocumento': 'DNI',
     'genero': 'Masculino',
+    'estadoCivil': 'Soltero(a)',
+    'condicion': 'Normal',
   }, {});
 
   const pad = (num, places) => String(num).padStart(places, '0')
@@ -64,6 +66,7 @@ export const Form = () => {
     if (pid) {
       if (networkStatus.connected) {
         http.get('/paciente/' + pid).then((result) => {
+          console.log('result', result);
           result.oficina = result.oficina.id;
           var target = new Date(result.fechaNacimiento);
           result.fechaNacimiento = target;
@@ -190,6 +193,20 @@ export const Form = () => {
     set(o => ({ ...o, fechaNacimiento: v }), () => {
       o.fechaNacimiento = v;
     });
+  }
+  
+  const onKeyUpNroDocumento = async () => {
+    if (o.nroDocumento.length > 50) {
+      http.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.nroDocumento + '&out=json').then(async (result) => {
+
+        console.log('result', result);
+        var datos = result.consultarResponse.return;
+        var v = datos.datosPersona.prenombres + ' ' + datos.datosPersona.apPrimer + ' ' + datos.datosPersona.apSegundo;
+        set(o => ({ ...o, apeNomb: v }), () => {
+          o.apeNomb = v;
+        });
+      });
+    }
 
   }
 
@@ -258,7 +275,7 @@ export const Form = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={1}>
                   </Grid>
-                  <Grid item xs={12} md={5}>
+                  <Grid item xs={12} md={3}>
                     <TextField
                       select
                       margin="normal"
@@ -285,7 +302,7 @@ export const Form = () => {
                     </TextField>
                   </Grid>
 
-                  <Grid item xs={12} md={5} >
+                  <Grid item xs={12} md={4} >
                     <TextField
                       type={'number'}
                       sx={{ fontWeight: 'bold' }}
@@ -295,7 +312,7 @@ export const Form = () => {
                       id="standard-name"
                       label="Número de Documento: "
                       placeholder="Ingrese el número de Documento."
-                      // onKeyUp={onKeyUp}
+                      onKeyUp={onKeyUpNroDocumento}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -306,12 +323,38 @@ export const Form = () => {
                       {...defaultProps("nroDocumento")}
                     />
                   </Grid>
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      select
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="standard-name"
+                      label="Seleccione la Alerta: "
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Keyboard />
+                          </InputAdornment>
+                        ),
+                      }}
+                      {...defaultProps("condicion", {
+                        // onChange: onChangeTipoDocumento
+                      })}
+                    >
+                      {['Normal', 'Gestante', 'Adulto Mayor'].map((item, i) => (
+                        <MenuItem key={'houseAccess_' + i} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
                 </Grid>
 
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={1}>
                   </Grid>
-                  <Grid item xs={12} md={5} >
+                  <Grid item xs={12} md={4} >
                     <DesktopDatePicker
                       label="Ingrese su Fecha de Nacimiento."
                       inputFormat="DD/MM/YYYY"
@@ -341,7 +384,7 @@ export const Form = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} md={5}>
+                  <Grid item xs={12} md={3}>
                     <TextField
                       select
                       margin="normal"
@@ -361,6 +404,32 @@ export const Form = () => {
                       })}
                     >
                       {['Masculino', 'Femenino'].map((item, i) => (
+                        <MenuItem key={'houseAccess_' + i} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      select
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="standard-name"
+                      label="Seleccione su Estado Civil: "
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Keyboard />
+                          </InputAdornment>
+                        ),
+                      }}
+                      {...defaultProps("estadoCivil", {
+                      })}
+                    >
+                      {['Soltero(a)', 'Casado(a)', 'Conviviente', 'Viudo(a)'].map((item, i) => (
                         <MenuItem key={'houseAccess_' + i} value={item}>
                           {item}
                         </MenuItem>
@@ -420,6 +489,30 @@ export const Form = () => {
                         </MenuItem>
                       ))}
                     </TextField>
+                  </Grid>
+                </Grid>
+
+                <Grid container>
+                  <Grid item xs={12} md={1}>
+                  </Grid>
+                  <Grid item xs={12} md={10}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      size="medium"
+                      id="standard-name"
+                      label="Cargo del Paciente: "
+                      placeholder="Ingrese el Cargo del Paciente"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Keyboard />
+                          </InputAdornment>
+                        ),
+                      }}
+                      {...defaultProps("cargo")}
+                    />
                   </Grid>
                 </Grid>
 

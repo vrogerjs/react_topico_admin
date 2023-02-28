@@ -129,6 +129,7 @@ const List = () => {
       data.size = result.size;
       state.totalElements = result.totalElements;
       data.data = data.data.concat(result.content);
+      console.log('dataaa', data);
     }
     setResult(data);
   };
@@ -161,7 +162,7 @@ const List = () => {
   };
 
   const editOnClick = () => {
-    navigate('/paciente/' + selected[0] + '/edit');
+    navigate('/paciente/');
   }
 
   const atencionOnClick = () => {
@@ -182,6 +183,28 @@ const List = () => {
       }
     });
   };
+
+  function getCellClass(value, condicion) {
+    var hoy = new Date();
+    var fechaNacimiento = new Date(value);
+    var edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (
+      diferenciaMeses < 0 ||
+      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+    ) {
+      edad--
+    }
+
+    if (condicion == 'Gestante') {
+      return 'bg-cherry border-table text-table';
+    } else if (edad >= 60 || condicion == 'Adulto Mayor') {
+      return 'bg-red border-table text-table';
+    } else {
+      return 'border-table text-table';
+    }
+
+  }
 
 
   const toID = (row) => {
@@ -293,34 +316,34 @@ const List = () => {
                         key={index + ' ' + toID(row)}
                         selected={isItemSelected}
                       >
-                        <TableCell padding="checkbox" className='border-table text-table'>
+                        <TableCell padding="checkbox">
                           <Checkbox
                             color="primary"
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table' >
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.numero}
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.oficina.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
+                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.apeNomb}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {pad(row.paciente.fechaNacimiento[2], 2)}/{pad(row.paciente.fechaNacimiento[1], 2)}/{row.paciente.fechaNacimiento[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.tipoDocumento}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.nroDocumento}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table text-table'>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.celular}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.modalidadContrato}
                         </TableCell>
                       </StyledTableRow >

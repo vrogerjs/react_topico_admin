@@ -180,6 +180,31 @@ const List = () => {
   };
 
 
+  function getCellClass(value) {
+    var hoy = new Date();
+    var fechaNacimiento = new Date(value);
+    var edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (
+      diferenciaMeses < 0 ||
+      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+    ) {
+      edad--
+    }
+
+
+    if (edad < 30 && edad >= 18) {
+      return 'bg-green border-table cursor-pointer text-table';
+    } else if (edad < 60 && edad >= 30) {
+      return 'bg-yellow border-table cursor-pointer text-table';
+    } else if (edad >= 60) {
+      return 'bg-red border-table cursor-pointer text-table';
+    } else {
+      return 'border-table cursor-pointer text-table';
+    }
+
+  }
+
   const toID = (row) => {
     return row._id && row._id.$oid ? row._id.$oid : row.id;
   }
@@ -236,14 +261,6 @@ const List = () => {
       <Card>
         <CardContent>
           <TableContainer className='table-container'>
-            {/* <Fab color="success" aria-label="add"
-              onClick={createOnClick}
-              style={{
-                position: 'absolute',
-                bottom: 72, right: 24
-              }}>
-              <AddIcon />
-            </Fab> */}
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
               <TableHead>
                 <TableRow>
@@ -258,25 +275,31 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table cursor-pointer text-table'>Oficina
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table cursor-pointer text-table'>Oficina
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table cursor-pointer text-table'>Paciente
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table cursor-pointer text-table'>Cargo
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table cursor-pointer text-table'>Paciente
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table cursor-pointer text-table'>Fecha de Nacimiento
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table cursor-pointer text-table'>Alerta
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table cursor-pointer text-table'>Tipo Documento
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table cursor-pointer text-table'>Fecha de Nacimiento
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table cursor-pointer text-table'>Nro Documento
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table cursor-pointer text-table'>Celular
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table cursor-pointer text-table'>Estado Civil
                     {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table cursor-pointer text-table'>Nro Documento
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table cursor-pointer text-table'>Celular
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table cursor-pointer text-table'>Modalidad/Contrato
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table cursor-pointer text-table'>Modalidad/Contrato
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -296,31 +319,37 @@ const List = () => {
                         key={index + ' ' + toID(row)}
                         selected={isItemSelected}
                       >
-                        <TableCell padding="checkbox" className='border-table cursor-pointer'>
+                        <TableCell padding="checkbox" className='border-table cursor-pointer text-table'>
                           <Checkbox
                             color="primary"
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table cursor-pointer' >
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.fechaNacimiento)} >
                           {row.oficina.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table cursor-pointer'>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.fechaNacimiento)} >
+                          {row.cargo}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.fechaNacimiento)}>
                           {row.apeNomb}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table cursor-pointer'>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.fechaNacimiento)}>
+                          {row.condicion}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.fechaNacimiento)}>
                           {pad(row.fechaNacimiento[2], 2)}/{pad(row.fechaNacimiento[1], 2)}/{row.fechaNacimiento[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table cursor-pointer'>
-                          {row.tipoDocumento}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table cursor-pointer'>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.fechaNacimiento)}>
                           {row.nroDocumento}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className='border-table cursor-pointer'>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.fechaNacimiento)}>
                           {row.celular}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table cursor-pointer'>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.fechaNacimiento)}>
+                          {row.estadoCivil}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.fechaNacimiento)}>
                           {row.modalidadContrato}
                         </TableCell>
                       </StyledTableRow >

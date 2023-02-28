@@ -159,6 +159,9 @@ const List = () => {
       var genero = resultHC.paciente.genero;
       o.genero = genero;
 
+      var estadoCivil = resultHC.paciente.estadoCivil;
+      o.estadoCivil = estadoCivil;
+
       var fechaNacimiento = pad(resultHC.paciente.fechaNacimiento[2], 2) + '/' + pad(resultHC.paciente.fechaNacimiento[1], 2) + '/' + resultHC.paciente.fechaNacimiento[0];
       o.fechaNacimiento = fechaNacimiento;
 
@@ -170,6 +173,9 @@ const List = () => {
 
       var oficina = resultHC.paciente.oficina.name;
       o.oficina = oficina;
+
+      var cargo = resultHC.paciente.cargo;
+      o.cargo = cargo;
 
       data.size = result.size;
       state.totalElements = result.totalElements;
@@ -219,6 +225,18 @@ const List = () => {
     navigate('/atencion/' + selected[0] + '/file');
   }
 
+  function getCellClass(value) {
+    if (value >= 16.0 && value < 18.5) {
+      return 'bg-poco-peso border-table text-table';
+    } else if (value >= 18.5 && value < 25.0) {
+      return 'bg-normal border-table text-table';
+    } else if (value >= 25.0 && value <= 40.0) {
+      return 'bg-sobre-peso border-table text-table';
+    } else {
+      return 'border-table text-table';
+    }
+  }
+
   const toID = (row) => {
     return row._id && row._id.$oid ? row._id.$oid : row.id;
   }
@@ -256,12 +274,20 @@ const List = () => {
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.genero}</TableCell>
               </TableRow>
               <TableRow>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Estado Civil</TableCell>
+                <TableCell colSpan={7} className='border-table-black p-5px'>{o.estadoCivil}</TableCell>
+              </TableRow>
+              <TableRow>
                 <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.modalidadContrato}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                 <TableCell colSpan={7} className='border-table-black p-5px'>{o.oficina}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Cargo Laboral</TableCell>
+                <TableCell colSpan={7} className='border-table-black p-5px'>{o.cargo}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
@@ -317,6 +343,9 @@ const List = () => {
                   <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>IMC
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
                   <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
@@ -354,6 +383,9 @@ const List = () => {
                         </TableCell>
                         <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
                           {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
+                        </TableCell>
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className={getCellClass(row.imc)}>
+                          {row.imc} Kg/m2
                         </TableCell>
                         <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
                           <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />

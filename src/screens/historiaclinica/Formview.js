@@ -68,6 +68,9 @@ export const Form = () => {
           result.celular = result.historiaclinica.paciente.celular;
           result.fechaEvaluacion = pad(result.fechaEvaluacion[2], 2) + '/' + pad(result.fechaEvaluacion[1], 2) + '/' + result.fechaEvaluacion[0];
           result.imc = parseFloat(result.peso / (result.talla * result.talla)).toFixed(2);
+          result.estadoCivil = result.historiaclinica.paciente.estadoCivil;
+          result.cargo = result.historiaclinica.paciente.cargo;
+          result.condicion = result.historiaclinica.paciente.condicion;
 
           var hoy = new Date()
           var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
@@ -146,6 +149,26 @@ export const Form = () => {
     documentTitle: 'Ficha de Atencion Medica',
     onAfterPrint: () => dispatch({ type: "snack", msg: 'Ficha de Atención impreso.!' }),
   });
+
+  function getCellClass(value) {
+    if (value >= 16.0 && value < 18.5) {
+      return 'bg-poco-peso border-table-black p-1-px';
+    } else if (value >= 18.5 && value < 25.0) {
+      return 'bg-normal border-table-black p-1-px';
+    } else if (value >= 25.0 && value <= 40.0) {
+      return 'bg-sobre-peso border-table-black p-1-px';
+    } else {
+      return 'border-table-black p-1-px';
+    }
+  }
+
+  function getCellClassGestante(value) {
+    if (value == 'Gestante') {
+      return '';
+    } else {
+      return 'display-none';
+    }
+  }
 
   function getContent() {
     return <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -235,12 +258,20 @@ export const Form = () => {
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.genero}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Estado Civil</TableCell>
+                      <TableCell colSpan={7} className='border-table-black p-1-px'>{o.estadoCivil}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.modalidadContrato}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
                       <TableCell colSpan={7} className='border-table-black p-1-px'>{o.oficina}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Cargo Laboral</TableCell>
+                      <TableCell colSpan={7} className='border-table-black p-1-px'>{o.cargo}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
@@ -275,8 +306,85 @@ export const Form = () => {
                       <TableCell className='border-table-black p-1-px bg-celeste'>Talla</TableCell>
                       <TableCell className='border-table-black p-1-px'>{o.talla} (m)</TableCell>
                       <TableCell className='border-table-black p-1-px bg-celeste'>IMC</TableCell>
-                      <TableCell colSpan={5} className='border-table-black p-1-px'>{o.imc} (Kg/m2)</TableCell>
+                      <TableCell colSpan={5} className={getCellClass(o.imc)}>{o.imc} (Kg/m2)</TableCell>
                     </TableRow>
+
+
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={10} className='border-table-black bg-table text-white fw-bold'>ATENCIONES PRENATALES</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Fecha de Atención</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.fechaEvaluacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Edad Gestación(semanas)</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.edadGestacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Peso Madre</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.peso} (Kg)</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Temperatura</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.temperatura} (ºC)</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Presion Arterial</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.presion} (mmHg)</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Pulso Materno</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.pulsoMaterno} (X min)</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Altura Uterina</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.alturaUterina} (cm)</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Situación</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.situacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Presentación</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.presentacion}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Posición</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.posicion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>F.C.F(por min/NA)</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.edadGestacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Movimiento Fetal</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.movimientoFetal}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Proteinuaria Cualitativa</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.posicion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Edema</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.movimientoFetal}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Reflejo Osteotendinoso</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.reflejo}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Exámen de Pezon</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.edadGestacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Indicador Fierro/Ac Fólico</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.indicadorFierro}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Indicador Calcio</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.indicadorCalcio}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Indicador Acido Fólico</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.edadGestacion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>EG de Eco Control</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.ecoControl}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Perfil Biofísico</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.perfilBiofisico}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Cita</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.proximaCita}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Visita Domiciliaria</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.visitaDomiciliaria}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Plan Parto</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.planParto}</TableCell>
+                    </TableRow>
+                    <TableRow className={getCellClassGestante(o.condicion)}>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Establecimiento de Atención</TableCell>
+                      <TableCell className='border-table-black p-1-px'>{o.lugarAtencion}</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>Responsable de la Atención</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.responsableAtencion}</TableCell><TableCell colSpan={2} className='border-table-black p-1-px bg-celeste'>N° de Formato SIS</TableCell>
+                      <TableCell colSpan={2} className='border-table-black p-1-px'>{o.numeroSis}</TableCell>
+                    </TableRow>
+
                     <TableRow>
                       <TableCell align='right' colSpan={10} className='espacio-table'>
                       </TableCell>

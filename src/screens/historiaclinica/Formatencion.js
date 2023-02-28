@@ -69,7 +69,6 @@ export const Form = () => {
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
-
   });
 
   const pad = (num, places) => String(num).padStart(places, '0')
@@ -96,7 +95,11 @@ export const Form = () => {
             result.oficina = result.paciente.oficina.name;
             result.modalidadContrato = result.paciente.modalidadContrato;
             result.celular = result.paciente.celular;
+            result.estadoCivil = result.paciente.estadoCivil;
+            result.cargo = result.paciente.cargo;
+            result.condicion = result.paciente.condicion;
             result.id = '';
+            console.log('result.condicion', result.condicion);
 
             var hoy = new Date()
             result.fechaEvaluacion = pad(hoy.getDate(), 2) + '/' + pad((hoy.getMonth() + 1), 2) + '/' + hoy.getFullYear();
@@ -150,6 +153,11 @@ export const Form = () => {
             result.oficina = result.historiaclinica.paciente.oficina.name;
             result.modalidadContrato = result.historiaclinica.paciente.modalidadContrato;
             result.celular = result.historiaclinica.paciente.celular;
+            result.estadoCivil = result.historiaclinica.paciente.estadoCivil;
+            result.cargo = result.historiaclinica.paciente.cargo;
+            result.condicion = result.historiaclinica.paciente.condicion;
+            console.log('result.condicion', result.condicion);
+
             result.fechaEvaluacion = pad(result.fechaEvaluacion[2], 2) + '/' + pad(result.fechaEvaluacion[1], 2) + '/' + result.fechaEvaluacion[0];
             var hoy = new Date()
             var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
@@ -237,10 +245,6 @@ export const Form = () => {
     navigate(-1);
   }
 
-  const onClickAdd = async () => {
-    // navigate('/paciente/create', { replace: true });
-  }
-
   const onClickSave = async () => {
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
@@ -277,7 +281,29 @@ export const Form = () => {
 
   const onKeyUpTalla = (event) => {
     var v = parseFloat((o.peso) / (o.talla * o.talla)).toFixed(2);
+    o.imc = v;
     set({ ...o, imc: v });
+    getCellClass(o.imc);
+  }
+
+  function getCellClass(value) {
+    if (value >= 16.0 && value < 18.5) {
+      return 'bg-poco-peso text-white';
+    } else if (value >= 18.5 && value < 25.0) {
+      return 'bg-normal text-white';
+    } else if (value >= 25.0 && value <= 40.0) {
+      return 'bg-sobre-peso text-white';
+    } else {
+      return '';
+    }
+  }
+
+  function getCellClassGestante(value) {
+    if (value == 'Gestante') {
+      return 'border-white';
+    } else {
+      return 'display-none border-white';
+    }
   }
 
   const onSubmit = data => console.log(data);
@@ -316,44 +342,52 @@ export const Form = () => {
                   <TableCell colSpan={10} className='border-table-black bg-table table-title-main'>DATOS PERSONALES DEL PACIENTE</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.numero}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Número de Historia Clínica</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.numero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.apeNomb}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Nombres y Apellidos</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.apeNomb}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaNacimiento}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Fecha de Nacimiento</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.fechaNacimiento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.nroDocumento}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>DNI</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.nroDocumento}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.edad}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Edad</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.edad}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.genero}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Genero</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.genero}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.modalidadContrato}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Estado Civil</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.estadoCivil}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.oficina}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Modalidad de Contrato</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.modalidadContrato}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.celular}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Gerencia o Dirección Laboral</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.oficina}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell colSpan={3} className='border-table-black p-1-px bg-celeste' sx={{ width: '40%' }}>Fecha de Evaluación</TableCell>
-                  <TableCell colSpan={7} className='border-table-black p-1-px'>{o.fechaEvaluacion}</TableCell>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Cargo Laboral</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.cargo}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Teléfono</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.celular}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={3} className='border-table-black p-5px bg-celeste' sx={{ width: '40%' }}>Fecha de Evaluación</TableCell>
+                  <TableCell colSpan={7} className='border-table-black p-5px'>{o.fechaEvaluacion}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align='right' colSpan={10} className='espacio-table'>
@@ -529,12 +563,14 @@ export const Form = () => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <TextField
+                    disabled='true'
                     margin="normal"
                     fullWidth
                     size="medium"
                     id="standard-name"
                     label="Indice de Masa Corporal:"
                     placeholder="IMC"
+                    className={getCellClass(o.imc)}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -546,6 +582,288 @@ export const Form = () => {
                       }
                     }}
                     {...defaultProps("imc", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion className={getCellClassGestante(o.condicion)}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              className='bg-gore'
+            >
+              <Typography>Datos de Atención Prenatal</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Edad de Gestación(semanas) :"
+                    {...defaultProps("edadGestacion", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Pulso Materno (por minuto) :"
+                    {...defaultProps("pulsoMaterno", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Altura Uterina (cm) :"
+                    {...defaultProps("alturaUterina", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Situación (L/T/NA):"
+                    {...defaultProps("situacion", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Presentación (C/P/NA):"
+                    {...defaultProps("presentacion", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Posición (D/I/NA):"
+                    {...defaultProps("posicion", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="FCF(por min/NA):"
+                    {...defaultProps("fcf", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Movimiento Fetal (+/-+/-++/SM/NA):"
+                    {...defaultProps("movimientoFetal", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Proteinuaria Cualitativa (+/++/+-+/NSH):"
+                    {...defaultProps("cualitativa", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Edema (+/++/+++/SE):"
+                    {...defaultProps("edema", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Reflejo Osteotendinoso (0-/+-/-++):"
+                    {...defaultProps("reflejo", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Examen de Pezon (Formado, No Formado, Sin Examen):"
+                    {...defaultProps("examenPezon", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Indicador Fierro/Acido Folico (>= 16 sem):"
+                    {...defaultProps("indicadorFierro", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Indicador Calcio (>= 20 sem):"
+                    {...defaultProps("indicadorCalcio", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Indicador Acido Fólico:"
+                    {...defaultProps("indicadorAcido", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="EG de Eco Control (Sem/No se hizo/NA):"
+                    {...defaultProps("ecoControl", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Perfil Biofísico (4,6,8,10 de 10/NSH NA)):"
+                    {...defaultProps("perfilBiofisico", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Cita:"
+                    {...defaultProps("cita", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Visita Domiciliaria (S/No/NA):"
+                    {...defaultProps("visitaDomiciliaria", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Plan Parto(control/visita/no  se hizo/NA):"
+                    {...defaultProps("planParto", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Lugar de la Atención:"
+                    {...defaultProps("lugarAtencion", { required: false })}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Responsable de la Atención:"
+                    {...defaultProps("responsableAtencion", { required: false })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Nro Formato SIS:"
+                    {...defaultProps("numeroSis", { required: false })}
                   />
                 </Grid>
               </Grid>
