@@ -211,7 +211,7 @@ const List = () => {
   }
 
   const onClickBack = () => {
-    navigate('/historiaclinica', { replace: true });
+    navigate('/psicologica', { replace: true });
   }
 
   const uploadOnClick = () => {

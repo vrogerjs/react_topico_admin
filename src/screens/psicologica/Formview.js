@@ -68,8 +68,9 @@ export const Form = () => {
           result.celular = result.historiaclinica.paciente.celular;
           result.fechaEvaluacion = pad(result.fechaEvaluacion[2], 2) + '/' + pad(result.fechaEvaluacion[1], 2) + '/' + result.fechaEvaluacion[0];
           result.imc = result.peso / (result.talla * result.talla);
-
-          result.proximaCita = pad(result.proximaCita[2], 2) + '/' + pad(result.proximaCita[1], 2) + '/' + result.proximaCita[0];
+          
+          if (result.proximaCita)
+            result.proximaCita = pad(result.proximaCita[2], 2) + '/' + pad(result.proximaCita[1], 2) + '/' + result.proximaCita[0];
 
           var hoy = new Date()
           var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
