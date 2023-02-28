@@ -2,8 +2,6 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useFormState, useResize, http } from 'gra-react-utils';
 import { VRadioGroup } from '../../utils/useToken';
 import { db } from '../../db';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import {
   ExpandMore as ExpandMoreIcon,
@@ -15,6 +13,7 @@ import {
   ReplyAll,
   WifiProtectedSetup
 } from '@mui/icons-material';
+import FileUpload from "react-material-file-upload";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Accordion, AccordionSummary, AccordionDetails, Alert,
@@ -46,7 +45,9 @@ export const Form = () => {
 
   const networkStatus = useSelector((state) => state.networkStatus);
 
-  const { pid } = useParams();
+  const { fid } = useParams();
+
+  const { aid } = useParams();
 
   const { temp } = useParams();
 
@@ -56,17 +57,9 @@ export const Form = () => {
 
   const [oficinas, setOficinas] = useState([]);
 
-  const [editorData, setEditorData] = useState('');
-
-  const [editorDataPA, setEditorDataPA] = useState('');
-
-  const [editorDataAN, setEditorDataAN] = useState('');
-
-  const [editorDataDI, setEditorDataDI] = useState('');
-
-  const [editorDataRE, setEditorDataRE] = useState('');
-
   const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
+
+  const [file, setFile] = useState(null);
 
   const [o, { defaultProps, handleChange, bindEvents, validate, set }] = useFormState(useState, {
 
@@ -75,7 +68,7 @@ export const Form = () => {
   const pad = (num, places) => String(num).padStart(places, '0')
 
   useEffect(() => {
-    dispatch({ type: 'title', title: (pid ? 'Actualizar' : 'Registrar') + ' Paciente.' });
+    dispatch({ type: 'title', title: (aid ? 'Actualizar' : 'Registrar') + ' Paciente.' });
     [].forEach(async (e) => {
       e[1](await db[e[0]].toArray());
     });
@@ -83,65 +76,11 @@ export const Form = () => {
 
   useEffect(() => {
     if (temp == 1) {
-      if (pid) {
+      if (aid) {
         if (networkStatus.connected) {
-          http.get('/historiaclinica/' + pid).then((result) => {
+          http.get('/psicologica/' + aid).then((result) => {
 
-            result.historiaclinica_id = result.id;
-            result.numero = result.numero;
-            result.apeNomb = result.paciente.apeNomb;
-            result.nroDocumento = result.paciente.nroDocumento;
-            result.fechaNacimiento = result.paciente.fechaNacimiento[2] + '/' + result.paciente.fechaNacimiento[1] + '/' + result.paciente.fechaNacimiento[0];
-            result.genero = result.paciente.genero;
-            result.oficina = result.paciente.oficina.name;
-            result.modalidadContrato = result.paciente.modalidadContrato;
-            result.celular = result.paciente.celular;
-            result.id='';
-
-            var hoy = new Date()
-            var fechaNacimiento = new Date(result.paciente.fechaNacimiento)
-            var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
-            var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
-            if (
-              diferenciaMeses < 0 ||
-              (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-            ) {
-              edad--
-            }
-
-            result.edad = edad;
-            set({ ...o, result });
-
-            set(result);
-          });
-        }
-      } else {
-        try {
-          var s = localStorage.getItem("setting");
-          if (s) {
-            s = JSON.parse(s);
-            var o = {};
-            o.apeNomb = s.apeNomb;
-            o.tipoDocumento = s.tipoDocumento;
-            o.nroDocumento = s.nroDocumento;
-            o.fechaNacimiento = s.fechaNacimiento;
-            o.genero = s.genero;
-            o.celular = s.celular;
-            o.oficina = s.oficina;
-            o.modalidad = s.modalidad;
-            o.numero = s.numero;
-
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    } else {
-      if (pid) {
-        if (networkStatus.connected) {
-          http.get('/psicologica/' + pid).then((result) => {
-
-            result.historiaclinica_id = result.historiaclinica.id;
+            result.psicologica_id = result.id;
             result.numero = result.historiaclinica.numero;
             result.apeNomb = result.historiaclinica.paciente.apeNomb;
             result.nroDocumento = result.historiaclinica.paciente.nroDocumento;
@@ -150,6 +89,7 @@ export const Form = () => {
             result.oficina = result.historiaclinica.paciente.oficina.name;
             result.modalidadContrato = result.historiaclinica.paciente.modalidadContrato;
             result.celular = result.historiaclinica.paciente.celular;
+            result.id = '';
 
             var hoy = new Date()
             var fechaNacimiento = new Date(result.historiaclinica.paciente.fechaNacimiento)
@@ -164,48 +104,46 @@ export const Form = () => {
 
             result.edad = edad;
             set({ ...o, result });
+
             set(result);
-
-            if (result.motivo)
-              setEditorData(result.motivo);
-
-            if (result.problemaActual)
-              setEditorDataPA(result.problemaActual);
-
-            if (result.anamnesis)
-              setEditorDataAN(result.anamnesis);
-
-            if (result.diagnostico)
-              setEditorDataDI(result.diagnostico);
-
-            if (result.recomendacion)
-              setEditorDataRE(result.recomendacion);
-
           });
         }
-      } else {
-        try {
-          var s = localStorage.getItem("setting");
-          if (s) {
-            s = JSON.parse(s);
-            var o = {};
-            o.apeNomb = s.apeNomb;
-            o.tipoDocumento = s.tipoDocumento;
-            o.nroDocumento = s.nroDocumento;
-            o.fechaNacimiento = s.fechaNacimiento;
-            o.genero = s.genero;
-            o.celular = s.celular;
-            o.oficina = s.oficina;
-            o.modalidad = s.modalidad;
-            o.numero = s.numero;
+      }
+    } else {
+      if (fid) {
+        if (networkStatus.connected) {
+          http.get('/filepsicologica/' + fid).then((result) => {
 
-          }
-        } catch (e) {
-          console.log(e);
+            result.psicologica_id = result.psicologica.id;
+            result.numero = result.psicologica.historiaclinica.numero;
+            result.apeNomb = result.psicologica.historiaclinica.paciente.apeNomb;
+            result.nroDocumento = result.psicologica.historiaclinica.paciente.nroDocumento;
+            result.fechaNacimiento = result.psicologica.historiaclinica.paciente.fechaNacimiento[2] + '/' + result.psicologica.historiaclinica.paciente.fechaNacimiento[1] + '/' + result.psicologica.historiaclinica.paciente.fechaNacimiento[0];
+            result.genero = result.psicologica.historiaclinica.paciente.genero;
+            result.oficina = result.psicologica.historiaclinica.paciente.oficina.name;
+            result.modalidadContrato = result.psicologica.historiaclinica.paciente.modalidadContrato;
+            result.celular = result.psicologica.historiaclinica.paciente.celular;
+
+            var hoy = new Date()
+            var fechaNacimiento = new Date(result.psicologica.historiaclinica.paciente.fechaNacimiento)
+            var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
+            var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
+            if (
+              diferenciaMeses < 0 ||
+              (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+            ) {
+              edad--
+            }
+
+            result.edad = edad;
+            set({ ...o, result });
+
+            set(result);
+          });
         }
       }
     }
-  }, [pid]);
+  }, [aid]);
 
   const { width, height } = useResize(React);
 
@@ -219,9 +157,8 @@ export const Form = () => {
     }
   }, [width, height]);
 
-
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Registrar Atención a Paciente - GORE Áncash' });
+    dispatch({ type: 'title', title: 'Registrar Exámenes Complementario de Ficha Psicologica a Paciente - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
@@ -234,11 +171,13 @@ export const Form = () => {
   };
 
   const onClickCancel = () => {
-    navigate(-1);
+    navigate('/historiaclinica/' + o.psicologica_id + '/psicologica');
   }
 
-  const onClickAdd = async () => {
-    // navigate('/paciente/create', { replace: true });
+  function onChangeFechaRegistro(v) {
+    set(o => ({ ...o, fechaRegistro: v }), () => {
+      o.fechaRegistro = v;
+    });
   }
 
   const onClickSave = async () => {
@@ -246,22 +185,38 @@ export const Form = () => {
     if (0 || form != null && validate(form)) {
 
       if (networkStatus.connected) {
-        o.historiaclinica = { id: o.historiaclinica_id };
-        var hoy = new Date();
-        o.fechaEvaluacion = hoy;
+        o.psicologica = { id: o.psicologica_id };
 
-        http.post('/psicologica', o).then(async (result) => {
-          console.log(result);
-          if (!o._id) {
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file[0]);
+          formData.append('filename', file[0].name);
+
+          http.post('https://web.regionancash.gob.pe/api/file/upload', formData, (h) => { delete h.Authorization; return h; }).then(async (result) => {
+            o.urlDocumento = result.tempFile;
+            http.post('/filepsicologica', o).then(async (result) => {
+              if (result.id) {
+                dispatch({ type: "snack", msg: 'Registro grabado!' });
+                navigate('/psicologica/' + o.psicologica_id + '/file', { replace: true });
+              }
+              else {
+                navigate(-1);
+              }
+
+            });
+          });
+        } else {
+          http.post('/filepsicologica', o).then(async (result) => {
             if (result.id) {
               dispatch({ type: "snack", msg: 'Registro grabado!' });
-              navigate('/psicologica/' + o.historiaclinica_id + '/atencion', { replace: true });
+              navigate('/psicologica/' + o.psicologica_id + '/file', { replace: true });
             }
             else {
               navigate(-1);
             }
-          }
-        });
+
+          });
+        }
       } else {
         if (!o.id) {
           o.tmpId = 1 * new Date();
@@ -278,9 +233,9 @@ export const Form = () => {
     }
   };
 
-  function onChangeProximaCita(v) {
-    set(o => ({ ...o, proximaCita: v }), () => {
-      o.proximaCita = v;
+  function onChangeFechaNacimiento(v) {
+    set(o => ({ ...o, fechaNacimiento: v }), () => {
+      o.fechaNacimiento = v;
     });
 
   }
@@ -368,163 +323,56 @@ export const Form = () => {
             </Table>
           </TableContainer>
 
-          <Accordion className='border-white'>
+          <Accordion className='border-white' defaultExpanded='true'>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
+              aria-controls="panel1a-content"
+              id="panel1a-header"
               className='bg-gore'
             >
-              <Typography>Motivo de la Consulta</Typography>
+              <Typography>Upload File</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Grid container>
-                <Grid item xs={12} md={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={editorData}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setEditorData(data);
-                      o.motivo = data;
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={10}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese el nombre del documento: "
+                    placeholder="Nombre del Documento"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
                     }}
+                    {...defaultProps("name")}
                   />
                 </Grid>
               </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Problema Actual</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
               <Grid container>
-                <Grid item xs={12} md={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={editorDataPA}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setEditorDataPA(data);
-                      o.problemaActual = data;
-                    }}
-                  />
+                <Grid item xs={12} md={1}>
                 </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Anamnesis (Datos Relevantes)</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={editorDataAN}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setEditorDataAN(data);
-                      o.anamnesis = data;
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Diagnóstico Presuntivo</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={editorDataDI}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setEditorDataDI(data);
-                      o.diagnostico = data;
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Recomendaciones</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={editorDataRE}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setEditorDataRE(data);
-                      o.recomendacion = data;
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion className='border-white'>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-              className='bg-gore'
-            >
-              <Typography>Próxima Cita</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={10} >
                   <DesktopDatePicker
-                    label="Ingrese su Próxima Cita."
+                    label="Ingrese la Fecha del Documento Complementario."
                     inputFormat="DD/MM/YYYY"
-                    value={o.proximaCita || ''}
-                    onChange={onChangeProximaCita}
+                    value={o.fechaRegistro || ''}
+                    onChange={onChangeFechaRegistro}
                     renderInput={(params) =>
                       <TextField
                         type={'number'}
                         sx={{ fontWeight: 'bold' }}
                         margin="normal"
+                        required
                         fullWidth
                         id="standard-name"
-                        label="Próxima Cita: "
-                        placeholder="Ingrese su Próxima Cita."
-                        // onKeyUp={onKeyUp}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
@@ -536,6 +384,14 @@ export const Form = () => {
                       // {...defaultProps("fechaNacimiento")}
                       />}
                   />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2} alignItems="center" className='mt-1'>
+                <Grid item xs={12} md={1}>
+                </Grid>
+                <Grid item xs={12} md={10}>
+                  <FileUpload value={file} onChange={setFile} />
                 </Grid>
               </Grid>
             </AccordionDetails>

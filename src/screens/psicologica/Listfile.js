@@ -1,35 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { db } from '../../db';
 import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
-  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
+  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, Link, Card, CardContent
 } from '@mui/material';
-import { Autorenew, CloudUpload, ControlPoint, ReplyAll, Visibility } from '@mui/icons-material';
+import { Autorenew, ControlPoint, PictureAsPdf, ReplyAll, Visibility } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
 import {
   useNavigate, useParams
 } from "react-router-dom";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { set } from 'ol/transform';
-import Paper from '@mui/material/Paper';
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -58,7 +43,7 @@ const List = () => {
 
   const navigate = useNavigate();
 
-  const [state, setState] = useState({ page: 0, rowsPerPage: 50 });
+  const [state, setState] = useState({ page: 0, rowsPerPage: 25 });
 
   const [result, setResult] = useState({ size: 0, data: [] });
 
@@ -84,6 +69,8 @@ const List = () => {
   };
 
   const { pid } = useParams();
+
+  const { aid } = useParams();
 
   const onClickRow = (event, code) => {
     const selectedIndex = selected.indexOf(code);
@@ -126,12 +113,12 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('/psicologica/' + page + '/' + state.rowsPerPage + '/' + pid);
+      const result = await http.get('/filepsicologica/' + page + '/' + state.rowsPerPage + '/' + aid);
 
-      const resultHC = await http.get('/historiaclinica/' + pid);
+      const resultA = await http.get('/psicologica/' + aid);
 
       var hoy = new Date()
-      var fechaNacimiento = new Date(resultHC.paciente.fechaNacimiento)
+      var fechaNacimiento = new Date(resultA.historiaclinica.paciente.fechaNacimiento)
       var edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
       var diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
       if (
@@ -143,31 +130,31 @@ const List = () => {
 
       o.edad = edad;
 
-      var historiaclinica_id = resultHC.id;
-      o.historiaclinica_id = historiaclinica_id;
+      var psicologica_id = resultA.id;
+      o.psicologica_id = psicologica_id;
 
-      var numero = resultHC.numero;
+      var numero = resultA.historiaclinica.numero;
       o.numero = numero;
 
-      var nombApe = resultHC.paciente.apeNomb;
+      var nombApe = resultA.historiaclinica.paciente.apeNomb;
       o.nombApe = nombApe;
 
-      var nroDocumento = resultHC.paciente.nroDocumento;
+      var nroDocumento = resultA.historiaclinica.paciente.nroDocumento;
       o.nroDocumento = nroDocumento;
 
-      var genero = resultHC.paciente.genero;
+      var genero = resultA.historiaclinica.paciente.genero;
       o.genero = genero;
 
-      var fechaNacimiento = pad(resultHC.paciente.fechaNacimiento[2], 2) + '/' + pad(resultHC.paciente.fechaNacimiento[1], 2) + '/' + resultHC.paciente.fechaNacimiento[0];
+      var fechaNacimiento = pad(resultA.historiaclinica.paciente.fechaNacimiento[2], 2) + '/' + pad(resultA.historiaclinica.paciente.fechaNacimiento[1], 2) + '/' + resultA.historiaclinica.paciente.fechaNacimiento[0];
       o.fechaNacimiento = fechaNacimiento;
 
-      var modalidadContrato = resultHC.paciente.modalidadContrato;
+      var modalidadContrato = resultA.historiaclinica.paciente.modalidadContrato;
       o.modalidadContrato = modalidadContrato;
 
-      var celular = resultHC.paciente.celular;
+      var celular = resultA.historiaclinica.paciente.celular;
       o.celular = celular;
 
-      var oficina = resultHC.paciente.oficina.name;
+      var oficina = resultA.historiaclinica.paciente.oficina.name;
       o.oficina = oficina;
 
       data.size = result.size;
@@ -194,28 +181,20 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Gestión de Fichas Psicológicas del Paciente - GORE Áncash' });
+    dispatch({ type: 'title', title: 'Gestión de Exámenes Complementario de Ficha Psicologica del Paciente - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
   const createOnClick = () => {
-    navigate('/psicologica/atencion/create/' + o.historiaclinica_id + '/1');
+    navigate('/psicologica/file/create/' + o.psicologica_id + '/1');
   };
 
   const editOnClick = () => {
-    navigate('/psicologica/atencion/' + selected[0] + '/edit/2');
-  }
-
-  const showOnClick = () => {
-    navigate('/psicologica/atencion/' + selected[0]);
+    navigate('/psicologica/file/' + selected[0] + '/edit/2');
   }
 
   const onClickBack = () => {
-    navigate('/historiaclinica', { replace: true });
-  }
-
-  const uploadOnClick = () => {
-    navigate('/psicologica/' + selected[0] + '/file');
+    navigate(-1);
   }
 
   const toID = (row) => {
@@ -275,22 +254,20 @@ const List = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
-          <Grid item md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="primary">Exámenes</Button>
+          <Grid item xs={12} md={2}>
+            <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
-          </Grid>
-          <Grid item xs={12} md={2}>
-            <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<Visibility />} onClick={showOnClick} variant="contained" color="primary">Ver Ficha</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary">Atras</Button>
+          </Grid>
+          <Grid item xs={12} md={2}>
           </Grid>
         </Grid>
       </Toolbar>
@@ -312,20 +289,14 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Consulta
+                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Nombre del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Problema Actual
-                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
-                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
-                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Documento
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -350,20 +321,16 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
-                          {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' >
+                          {pad(row.fechaRegistro[2], 2)}/{pad(row.fechaRegistro[1], 2)}/{row.fechaRegistro[0]}
                         </TableCell>
                         <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
-                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.motivo }} />
+                          {row.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.problemaActual }} />
-                        </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />
-                        </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                          <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.diagnostico }} />
+                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' align='center'>
+                          <Link href={`https://web.regionancash.gob.pe/fs/temp/${row.urlDocumento}`} underline="none" target={'_link'}>
+                            <PictureAsPdf color="primary" />
+                          </Link>
                         </TableCell>
                       </StyledTableRow >
                     );
@@ -378,7 +345,6 @@ const List = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
           <TablePagination
             rowsPerPageOptions={[10, 20, 50]}
             component="div"
