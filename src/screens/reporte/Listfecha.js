@@ -149,6 +149,17 @@ const List = () => {
 
   }
 
+  const toDate = (d) => {
+    if (d && d.toDate) {
+      d = d.toDate();
+      var day = pad(d.getDate(), 2);
+      var month = pad(d.getMonth() + 1, 2);
+      var year = d.getFullYear();
+      d = year + '-' + month + '-' + day;
+    }
+    return d;
+  }
+
   const fetchData = async () => {
     var data = { data: [] };
     if (networkStatus.connected) {
@@ -171,15 +182,13 @@ const List = () => {
   });
 
   function onChangeFechaIni(v) {
-    set(o => ({ ...o, fechaIni: v }), () => {
-      o.fechaIni = v;
-    });
+    o.fechaIni = v;
+    set(o => ({ ...o, fechaIni: v }));
   }
 
   function onChangeFechaFin(v) {
-    set(o => ({ ...o, fechaFin: v }), () => {
-      o.fechaFin = v;
-    });
+    o.fechaFin = v;
+    set(o => ({ ...o, fechaFin: v }));
   }
 
   const toID = (row) => {
@@ -259,7 +268,7 @@ const List = () => {
         <Card ref={componentRef} className='padding-print'>
           <CardContent>
             <Typography sx={{ fontSize: 18 }} gutterBottom className='text-uppercase fw-bold text-center'>
-              Listado de Atenciones desde el {o.fechaIni} hasta {o.fechaFin}
+              Listado de Atenciones desde el {toDate(o.fechaIni)} hasta {toDate(o.fechaFin)}
             </Typography>
             <TableContainer className='table-container' component={Paper}>
               <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
