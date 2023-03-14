@@ -259,8 +259,8 @@ const List = () => {
       </Grid>
 
       <Card>
-        <CardContent>
-          <TableContainer className='table-container'>
+        <CardContent >
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '415px' }}>
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
               <TableHead>
                 <TableRow>
@@ -275,28 +275,28 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Historia Clinica
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Nro Historia Clinica
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Oficina
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table text-table'>Oficina
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Paciente
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Paciente
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Nacimiento
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Fecha de Nacimiento
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Tipo Documento
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Tipo Documento
                     {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Nro Documento
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Nro Documento
                     {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Celular
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Celular
                     {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Modalidad/Contrato
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} className='bg-gore border-table text-table'>Modalidad/Contrato
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -322,28 +322,28 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.numero}
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.oficina.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.apeNomb}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {pad(row.paciente.fechaNacimiento[2], 2)}/{pad(row.paciente.fechaNacimiento[1], 2)}/{row.paciente.fechaNacimiento[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.tipoDocumento}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.nroDocumento}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} align="center" className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.celular}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} className={getCellClass(row.paciente.fechaNacimiento, row.paciente.condicion)}>
                           {row.paciente.modalidadContrato}
                         </TableCell>
                       </StyledTableRow >

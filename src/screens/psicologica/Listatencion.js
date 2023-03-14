@@ -277,7 +277,7 @@ const List = () => {
           <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={12} md={2}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<CloudUpload />} onClick={uploadOnClick} variant="contained" color="primary">Exámenes</Button>
           </Grid>
           <Grid item xs={12} md={2}>
@@ -297,7 +297,7 @@ const List = () => {
 
       <Card>
         <CardContent>
-          <TableContainer className='table-container'>
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '410px' }}>
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
               <TableHead>
                 <TableRow>
@@ -312,19 +312,19 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha de Atención
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table text-table'>Fecha de Atención
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Consulta
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Motivo de Consulta
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Problema Actual
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Problema Actual
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Anamnesis
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Anamnesis
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Diagnóstico Presuntivo
                     {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -350,19 +350,19 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} align='center' className='border-table text-table' >
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} align='center' className='border-table text-table' >
                           {pad(row.fechaEvaluacion[2], 2)}/{pad(row.fechaEvaluacion[1], 2)}/{row.fechaEvaluacion[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table' >
                           <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.motivo }} />
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table'>
                           <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.problemaActual }} />
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table'>
                           <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.anamnesis }} />
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table'>
                           <Typography className='text-table' dangerouslySetInnerHTML={{ __html: row.diagnostico }} />
                         </TableCell>
                       </StyledTableRow >

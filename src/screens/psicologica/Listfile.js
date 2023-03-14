@@ -274,7 +274,7 @@ const List = () => {
 
       <Card>
         <CardContent>
-          <TableContainer className='table-container'>
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '410px' }}>
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
               <TableHead>
                 <TableRow>
@@ -289,13 +289,13 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha del Documento
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Fecha del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Nombre del Documento
+                  <StyledTableCell style={{ minWidth: '50%', maxWidth: '50%' }} className='bg-gore border-table text-table'>Nombre del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Documento
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -321,13 +321,13 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table' >
                           {pad(row.fechaRegistro[2], 2)}/{pad(row.fechaRegistro[1], 2)}/{row.fechaRegistro[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: '50%', maxWidth: '50%' }} className='border-table text-table' >
                           {row.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' align='center'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table' align='center'>
                           <Link href={`https://web.regionancash.gob.pe/fs/temp/${row.urlDocumento}`} underline="none" target={'_link'}>
                             <PictureAsPdf color="primary" />
                           </Link>

@@ -194,17 +194,23 @@ export const Form = () => {
       o.fechaNacimiento = v;
     });
   }
-  
-  const onKeyUpNroDocumento = async () => {
-    if (o.nroDocumento.length > 50) {
-      http.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.nroDocumento + '&out=json').then(async (result) => {
 
-        console.log('result', result);
-        var datos = result.consultarResponse.return;
-        var v = datos.datosPersona.prenombres + ' ' + datos.datosPersona.apPrimer + ' ' + datos.datosPersona.apSegundo;
-        set(o => ({ ...o, apeNomb: v }), () => {
-          o.apeNomb = v;
-        });
+  const onKeyUpNroDocumento = async () => {
+    if (o.nroDocumento.length > 7) {
+      http.get('http://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.nroDocumento + '&out=json', (h) => {
+        return { "Content-Type": "*/*" };
+      }).then(async (result) => {
+        if (result.consultarResponse.return.coResultado == '0000') {
+          var datos = result.consultarResponse.return;
+          var v = datos.datosPersona.prenombres + ' ' + datos.datosPersona.apPrimer + ' ' + datos.datosPersona.apSegundo;
+          set(o => ({ ...o, apeNomb: v }), () => {
+            o.apeNomb = v;
+          });
+        } else {
+          set(o => ({ ...o, apeNomb: '' }), () => {
+            o.apeNomb = '';
+          });
+        }
       });
     }
 

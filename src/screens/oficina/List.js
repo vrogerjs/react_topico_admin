@@ -181,7 +181,7 @@ const List = () => {
 
       <Card>
         <CardContent>
-          <TableContainer className='table-container'>
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '520px' }}>
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }} >
               <TableHead>
                 <TableRow>

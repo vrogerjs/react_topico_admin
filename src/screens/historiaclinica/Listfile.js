@@ -260,30 +260,25 @@ const List = () => {
       </Grid>
 
       <Toolbar className="Toolbar-table mt-1" direction="row" >
-
         <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
-          </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<ControlPoint />} onClick={createOnClick} variant="contained" color="primary">Nuevo</Button>
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="primary">Editar</Button>
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} startIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
             <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickBack} startIcon={<ReplyAll />} variant="contained" color="primary">Atras</Button>
-          </Grid>
-          <Grid item xs={12} md={2}>
           </Grid>
         </Grid>
       </Toolbar>
 
       <Card>
         <CardContent>
-          <TableContainer className='table-container'>
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '500px' }}>
             <Table stickyHeader aria-label="sticky table" sx={{ maxWidth: '100%' }}>
               <TableHead>
                 <TableRow>
@@ -298,13 +293,13 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Fecha del Documento
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Fecha del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Nombre del Documento
+                  <StyledTableCell style={{ minWidth: '50%', maxWidth: '50%' }} className='bg-gore border-table text-table'>Nombre del Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 50, maxWidth: 50 }} className='bg-gore border-table text-table'>Documento
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table text-table'>Documento
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -330,13 +325,13 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table' >
                           {pad(row.fechaRegistro[2], 2)}/{pad(row.fechaRegistro[1], 2)}/{row.fechaRegistro[0]}
                         </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' >
+                        <TableCell style={{ minWidth: '50%', maxWidth: '50%' }} className='border-table text-table' >
                           {row.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: 50, maxWidth: 50 }} className='border-table text-table' align='center'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table text-table' align='center'>
                           <Link href={`https://web.regionancash.gob.pe/fs/temp/${row.urlDocumento}`} underline="none" target={'_link'}>
                             <PictureAsPdf color="primary" />
                           </Link>

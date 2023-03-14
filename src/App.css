@@ -9,7 +9,6 @@
 
 .MuiListItemIcon-root {
   min-width: 30px !important;
-
 }
 
 .MuiTableCell-head {
@@ -84,8 +83,7 @@ textarea {
 }
 
 .button-login {
-  background:
-    #b10000 -webkit-gradient(linear, left top, left bottom, from(rgba(245, 111, 111, 0.8)), to(rgba(255, 255, 255, 0)))
+  background: #b10000 -webkit-gradient(linear, left top, left bottom, from(rgba(245, 111, 111, 0.8)), to(rgba(255, 255, 255, 0)));
 }
 
 .MuiAccordionSummary-root {
@@ -98,7 +96,7 @@ textarea {
 }
 
 .bg-gore {
-  background-color: #00AEED !important;
+  background-color: #00aeed !important;
 }
 
 .bg-table {
@@ -142,7 +140,7 @@ textarea {
 }
 
 .color-gore {
-  color: #00AEED !important;
+  color: #00aeed !important;
 }
 
 .text-black {
@@ -150,7 +148,7 @@ textarea {
 }
 
 .text-white {
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .bs-black {
@@ -173,7 +171,7 @@ textarea {
   text-transform: capitalize !important;
 }
 
-.text-uppercase{
+.text-uppercase {
   text-transform: uppercase !important;
 }
 
@@ -245,14 +243,14 @@ textarea {
 }
 
 .upload-label {
-  background-color: '#2196f3' !important;
+  background-color: "#2196f3" !important;
   border-radius: 5 !important;
-  color: '#fff' !important;
-  padding: '10px 15px' !important;
+  color: "#fff" !important;
+  padding: "10px 15px" !important;
 }
 
 .upload-label:hover {
-  background-color: '#1976d2' !important;
+  background-color: "#1976d2" !important;
 }
 
 .display-none {
@@ -264,7 +262,7 @@ textarea {
   padding: 10px !important;
   font-weight: bold !important;
   text-align: center !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .table-container {
@@ -292,12 +290,12 @@ textarea {
 }
 
 .bg-white {
-  background-color: #FFF !important;
+  background-color: #fff !important;
 }
 
 .bg-red {
   background-color: red !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .bg-yellow {
@@ -306,12 +304,12 @@ textarea {
 
 .bg-green {
   background-color: green !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .bg-cherry {
   background-color: #800040 !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .sidebar-gore {
@@ -321,13 +319,13 @@ textarea {
 }
 
 .MuiPaper-elevation0 {
-  background-color: #00AEED !important;
-  border: 8px solid #00AEED !important;
+  background-color: #00aeed !important;
+  border: 8px solid #00aeed !important;
 }
 
 header.MuiPaper-elevation4 {
-  background-color: #00AEED !important;
-  border: 2px solid #FFF !important;
+  background-color: #00aeed !important;
+  border: 2px solid #fff !important;
   text-align: center !important;
 }
 
@@ -349,7 +347,7 @@ header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAp
 } */
 
 .bb-2 {
-  border: 2px solid #FFF !important;
+  border: 2px solid #fff !important;
 }
 
 .MuiTypography-noWrap {
@@ -371,7 +369,6 @@ header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAp
   }
 
   .padding-print {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
+    margin: 20px !important;
   }
 }
