@@ -363,6 +363,10 @@ header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAp
   font-style: italic !important;
 }
 
+.bg-teal{
+  background-color: #009688!important;
+}
+
 @media print {
   .no-imprimir {
     display: none !important;
